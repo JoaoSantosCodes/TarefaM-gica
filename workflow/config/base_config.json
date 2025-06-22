@@ -1,0 +1,23 @@
+{
+    "checklist_patterns": [
+        "*.md",
+        "CHECKLIST_*.md"
+    ],
+    "output_directory": "outputs",
+    "priorities": {
+        "critical": "🔥",
+        "important": "⚡",
+        "normal": "📈"
+    },
+    "metrics": {
+        "collect_totals": true,
+        "collect_progress": true,
+        "collect_priorities": true
+    },
+    "report": {
+        "include_header": true,
+        "include_timestamp": true,
+        "include_metrics": true,
+        "include_suggestions": true
+    }
+} 

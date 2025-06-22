@@ -1,10 +1,28 @@
 ---
-name: ✨ Feature Request
+name: 🚀 Feature Request
 about: Sugira uma ideia para este projeto
 title: '[FEATURE] '
-labels: ['enhancement']
+labels: enhancement
 assignees: ''
 ---
+
+**Sua solicitação de funcionalidade está relacionada a um problema?**
+Uma descrição clara e concisa do problema. Ex: Sempre fico frustrado quando [...]
+
+**Descreva a solução que você gostaria**
+Uma descrição clara e concisa do que você quer que aconteça.
+
+**Descreva as alternativas que você considerou**
+Uma descrição clara e concisa de quaisquer soluções ou recursos alternativos que você considerou.
+
+**Contexto adicional**
+Adicione qualquer outro contexto ou screenshots sobre a solicitação de recurso aqui.
+
+**Impacto nos Checklists**
+- [ ] Requer atualização nos checklists existentes
+- [ ] Requer criação de novos checklists
+- [ ] Afeta a análise de IA
+- [ ] Afeta o workflow básico
 
 ## 🎯 Problema/Necessidade
 Uma descrição clara e concisa do problema que você está enfrentando ou da funcionalidade que gostaria de ver implementada.

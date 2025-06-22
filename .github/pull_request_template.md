@@ -1,5 +1,11 @@
 ## 📝 Descrição
-Uma descrição clara e concisa das mudanças implementadas.
+Uma descrição clara e concisa das mudanças.
+
+## 🔄 Tipo de Mudança
+- [ ] 🐛 Bug fix (mudança que corrige um problema)
+- [ ] ✨ Nova feature (mudança que adiciona funcionalidade)
+- [ ] 💥 Breaking change (correção/feature que causa mudança em funcionalidades existentes)
+- [ ] 📚 Documentação (atualização apenas na documentação)
 
 ## 🎯 Tipo de Mudança
 - [ ] 🐛 Bug fix (correção que resolve um problema)
@@ -12,7 +18,7 @@ Uma descrição clara e concisa das mudanças implementadas.
 - [ ] 🔧 Configuração (mudanças em arquivos de configuração)
 
 ## 🔗 Issues Relacionadas
-Closes #[número da issue]
+Fixes #(issue)
 
 ## 📸 Screenshots
 Se aplicável, adicione screenshots para mostrar as mudanças visuais.
@@ -58,12 +64,10 @@ Descreva as principais mudanças técnicas implementadas:
 - [ ] Novas integrações
 
 ## 🚀 Como Testar
-Instruções para testar as mudanças:
-
-1. Clone o repositório
-2. Execute `flutter pub get`
-3. Execute `flutter run`
-4. Teste a funcionalidade [descreva os passos]
+Descreva os testes que você executou e como reproduzir:
+1. Vá para '...'
+2. Execute '....'
+3. Verifique '....'
 
 ## 📱 Dispositivos Testados
 - [ ] Android (versão mínima)

@@ -1,355 +1,113 @@
-# 🤝 Guia de Contribuição - TarefaMágica
+# �� Contribuindo com o Workflow Automático
 
-Obrigado por considerar contribuir com o **TarefaMágica**! Este documento fornece diretrizes para contribuir com o projeto.
+Obrigado por considerar contribuir com o Workflow Automático! Este documento fornece as diretrizes para contribuir com o projeto.
 
-## 📋 Índice
+## 📋 Processo de Contribuição
 
-- [Como Contribuir](#como-contribuir)
-- [Configuração do Ambiente](#configuração-do-ambiente)
-- [Padrões de Código](#padrões-de-código)
-- [Processo de Pull Request](#processo-de-pull-request)
-- [Reportando Bugs](#reportando-bugs)
-- [Solicitando Funcionalidades](#solicitando-funcionalidades)
-- [Código de Conduta](#código-de-conduta)
+1. Fork o repositório
+2. Clone seu fork localmente
+3. Crie uma branch para sua feature/correção
+4. Faça suas alterações
+5. Execute os testes
+6. Commit suas alterações
+7. Push para seu fork
+8. Abra um Pull Request
 
----
+## 🔧 Ambiente de Desenvolvimento
 
-## 🚀 Como Contribuir
+1. Clone o repositório:
+```bash
+git clone https://github.com/JoaoSantosCodes/Workflow-Automatico.git
+cd Workflow-Automatico
+```
 
-### 📝 Tipos de Contribuição
+2. Crie e ative um ambiente virtual:
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\\Scripts\\activate     # Windows
+```
 
-- **🐛 Bug Reports** - Reportar problemas encontrados
-- **✨ Feature Requests** - Sugerir novas funcionalidades
-- **🔧 Code Contributions** - Contribuir com código
-- **📚 Documentation** - Melhorar documentação
-- **🧪 Testing** - Adicionar ou melhorar testes
-- **🎨 Design** - Sugerir melhorias de UI/UX
+3. Instale as dependências de desenvolvimento:
+```bash
+pip install -r requirements.txt
+```
 
-### 🎯 Áreas de Foco
+## ✅ Testes
 
-#### 🧒 **Experiência da Criança**
-- Interface intuitiva e amigável
-- Gamificação envolvente
-- Feedback visual claro
-- Acessibilidade
-
-#### 👨‍👩‍👧 **Experiência dos Pais**
-- Controle e monitoramento
-- Relatórios claros
-- Configurações flexíveis
-- Segurança
-
-#### 🔧 **Aspectos Técnicos**
-- Performance otimizada
-- Código limpo e bem documentado
-- Testes abrangentes
-- Segurança robusta
-
----
-
-## 🛠️ Configuração do Ambiente
-
-### 📋 Pré-requisitos
-
-- **Flutter SDK** (versão estável)
-- **Android Studio** ou **VS Code**
-- **Git**
-- **Conta Firebase** (para desenvolvimento)
-
-### 🔧 Setup Local
-
-1. **Clone o repositório**
-   ```bash
-   git clone https://github.com/JoaoSantosCodes/TarefaMágica.git
-   cd TarefaMágica
-   ```
-
-2. **Instale as dependências**
-   ```bash
-   flutter pub get
-   ```
-
-3. **Configure o Firebase**
-   - Crie um projeto no Firebase Console
-   - Baixe os arquivos de configuração
-   - Configure as credenciais
-
-4. **Execute o projeto**
-   ```bash
-   flutter run
-   ```
-
-### 🧪 Executando Testes
+Execute os testes antes de submeter alterações:
 
 ```bash
-# Testes unitários
-flutter test
-
-# Testes de integração
-flutter test integration_test/
-
-# Análise de código
-flutter analyze
+pytest tests/
 ```
 
----
+Para verificar a cobertura de código:
 
-## 📝 Padrões de Código
-
-### 🎨 **Convenções de Nomenclatura**
-
-#### **Dart/Flutter**
-```dart
-// Classes: PascalCase
-class TaskManager {}
-
-// Variáveis e funções: camelCase
-String taskTitle;
-void createTask() {}
-
-// Constantes: SCREAMING_SNAKE_CASE
-const String APP_NAME = 'TarefaMágica';
-
-// Arquivos: snake_case
-task_manager.dart
-user_profile_screen.dart
+```bash
+pytest --cov=workflow tests/
 ```
 
-#### **Firebase**
-```javascript
-// Collections: camelCase
-users, taskSubmissions, familyGroups
+## 📝 Estilo de Código
 
-// Fields: camelCase
-taskTitle, createdAt, isCompleted
+Usamos as seguintes ferramentas para manter a qualidade do código:
 
-// Functions: camelCase
-createTask, approveSubmission, calculateReward
+- Black para formatação
+- Flake8 para linting
+- isort para ordenação de imports
+
+Execute antes de commitar:
+
+```bash
+black .
+flake8 .
+isort .
 ```
 
-### 📁 **Estrutura de Arquivos**
+## 📚 Documentação
 
-```
-lib/
-├── main.dart
-├── app/
-│   ├── app.dart
-│   └── routes.dart
-├── core/
-│   ├── constants/
-│   ├── utils/
-│   └── services/
-├── features/
-│   ├── auth/
-│   ├── tasks/
-│   ├── rewards/
-│   └── gamification/
-├── shared/
-│   ├── widgets/
-│   ├── models/
-│   └── providers/
-└── assets/
-    ├── images/
-    ├── fonts/
-    └── icons/
-```
+- Mantenha a documentação atualizada
+- Adicione docstrings para novas funções/classes
+- Atualize o README.md se necessário
+- Inclua exemplos de uso
 
-### 🔍 **Comentários e Documentação**
+## 🏷️ Commits
 
-```dart
-/// Classe responsável por gerenciar as tarefas do usuário.
-/// 
-/// Esta classe fornece métodos para criar, atualizar e deletar tarefas,
-/// além de gerenciar o estado das tarefas no aplicativo.
-class TaskManager {
-  /// Cria uma nova tarefa no sistema.
-  /// 
-  /// [title] - Título da tarefa
-  /// [description] - Descrição detalhada da tarefa
-  /// [reward] - Valor da recompensa em centavos
-  /// 
-  /// Retorna um [Future<Task>] com a tarefa criada.
-  Future<Task> createTask({
-    required String title,
-    required String description,
-    required int reward,
-  }) async {
-    // Implementação...
-  }
-}
-```
+Use mensagens de commit claras e descritivas:
 
-### 🧪 **Testes**
+- feat: Nova funcionalidade
+- fix: Correção de bug
+- docs: Atualização de documentação
+- test: Adição/modificação de testes
+- refactor: Refatoração de código
+- style: Formatação, ponto e vírgula, etc
+- chore: Tarefas de manutenção
 
-```dart
-// Teste unitário
-test('should create task successfully', () async {
-  // Arrange
-  final taskManager = TaskManager();
-  final taskData = TaskData(
-    title: 'Arrumar a cama',
-    description: 'Fazer a cama pela manhã',
-    reward: 200, // R$2,00
-  );
+## 🔍 Pull Requests
 
-  // Act
-  final task = await taskManager.createTask(taskData);
+1. Descreva claramente o propósito
+2. Referencie issues relacionadas
+3. Inclua testes para novas funcionalidades
+4. Mantenha o PR focado em uma única alteração
+5. Atualize a documentação se necessário
 
-  // Assert
-  expect(task.title, equals('Arrumar a cama'));
-  expect(task.reward, equals(200));
-  expect(task.isCompleted, isFalse);
-});
-```
+## 📌 Notas Importantes
 
----
+- Não quebre a compatibilidade com versões anteriores
+- Mantenha a cobertura de testes
+- Siga as convenções de código existentes
+- Documente alterações significativas
 
-## 🔄 Processo de Pull Request
+## 🚫 O que evitar
 
-### 📋 **Checklist Antes do PR**
+- Alterações não relacionadas ao escopo do PR
+- Commits grandes e não relacionados
+- Código não testado
+- Breaking changes sem discussão prévia
 
-- [ ] Código segue os padrões do projeto
-- [ ] Testes passando localmente
-- [ ] Documentação atualizada
-- [ ] Screenshots adicionadas (se aplicável)
-- [ ] Issue relacionada criada/linkada
+## 📬 Contato
 
-### 🔄 **Workflow**
+Para dúvidas ou sugestões, abra uma issue no repositório.
 
-1. **Crie uma branch**
-   ```bash
-   git checkout -b feature/nova-funcionalidade
-   ```
+## 📄 Licença
 
-2. **Faça suas mudanças**
-   - Siga os padrões de código
-   - Adicione testes
-   - Atualize documentação
-
-3. **Commit suas mudanças**
-   ```bash
-   git add .
-   git commit -m "feat: adiciona nova funcionalidade de gamificação"
-   ```
-
-4. **Push para o repositório**
-   ```bash
-   git push origin feature/nova-funcionalidade
-   ```
-
-5. **Crie o Pull Request**
-   - Use o template fornecido
-   - Descreva as mudanças claramente
-   - Linke issues relacionadas
-
-### 📝 **Convenções de Commit**
-
-```
-feat: nova funcionalidade
-fix: correção de bug
-docs: mudanças na documentação
-style: formatação, ponto e vírgula, etc.
-refactor: refatoração de código
-test: adicionando ou corrigindo testes
-chore: mudanças em build, configs, etc.
-```
-
----
-
-## 🐛 Reportando Bugs
-
-### 📋 **Informações Necessárias**
-
-- **Descrição clara** do problema
-- **Passos para reproduzir**
-- **Comportamento esperado**
-- **Comportamento atual**
-- **Informações do dispositivo**
-- **Screenshots** (se aplicável)
-- **Logs de erro**
-
-### 📱 **Template de Bug Report**
-
-Use o template `🐛 Bug Report` ao criar uma issue no GitHub.
-
----
-
-## ✨ Solicitando Funcionalidades
-
-### 💡 **Diretrizes**
-
-- Descreva o problema que a funcionalidade resolveria
-- Explique como a funcionalidade funcionaria
-- Considere o impacto na experiência do usuário
-- Avalie a complexidade técnica
-
-### 🎯 **Template de Feature Request**
-
-Use o template `✨ Feature Request` ao criar uma issue no GitHub.
-
----
-
-## 🤝 Código de Conduta
-
-### 📜 **Nossos Padrões**
-
-- Seja respeitoso e inclusivo
-- Use linguagem apropriada
-- Aceite críticas construtivas
-- Foque no que é melhor para a comunidade
-
-### 🚫 **Comportamento Inaceitável**
-
-- Linguagem ofensiva ou discriminatória
-- Trolling ou comentários insultuosos
-- Assédio de qualquer forma
-- Publicar informações privadas
-
-### 📞 **Como Reportar**
-
-Se você testemunhar ou sofrer comportamento inaceitável, entre em contato através de:
-- Email: [seu-email@exemplo.com]
-- GitHub Issues: [Crie uma issue privada]
-
----
-
-## 🏆 Reconhecimento
-
-### 🌟 **Contribuidores**
-
-- Seu nome será adicionado ao README
-- Você receberá crédito nos releases
-- Suas contribuições serão reconhecidas
-
-### 🎖️ **Níveis de Contribuição**
-
-- **🥉 Bronze** - 1-5 contribuições
-- **🥈 Prata** - 6-15 contribuições
-- **🥇 Ouro** - 16+ contribuições
-- **💎 Diamante** - Contribuições excepcionais
-
----
-
-## 📞 Suporte
-
-### 💬 **Canais de Comunicação**
-
-- **GitHub Issues** - Para bugs e funcionalidades
-- **GitHub Discussions** - Para perguntas e discussões
-- **Email** - Para assuntos privados
-
-### 📚 **Recursos Úteis**
-
-- [Documentação Flutter](https://docs.flutter.dev/)
-- [Documentação Firebase](https://firebase.google.com/docs)
-- [Guia de Dart](https://dart.dev/guides)
-
----
-
-## 🙏 Agradecimentos
-
-Obrigado por contribuir com o **TarefaMágica**! Suas contribuições ajudam a criar uma experiência melhor para crianças e famílias em todo o mundo.
-
----
-
-**Juntos, vamos tornar as tarefas domésticas mágicas! ✨🧒** 
+Ao contribuir, você concorda que suas contribuições serão licenciadas sob a mesma licença MIT do projeto. 

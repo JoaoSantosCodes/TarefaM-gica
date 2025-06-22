@@ -1,0 +1,46 @@
+{
+    "structure": {
+        "enabled": true,
+        "format": "mermaid",
+        "style": "graph TD",
+        "include_modules": true,
+        "include_classes": true
+    },
+    "workflow": {
+        "enabled": true,
+        "format": "mermaid",
+        "style": "graph LR",
+        "show_dependencies": true,
+        "show_priorities": true
+    },
+    "execution": {
+        "enabled": true,
+        "format": "mermaid",
+        "style": "sequenceDiagram",
+        "show_participants": true,
+        "show_messages": true
+    },
+    "roadmap": {
+        "enabled": true,
+        "format": "mermaid",
+        "style": "gantt",
+        "show_dates": true,
+        "show_dependencies": true
+    },
+    "output": {
+        "directory": "diagrams",
+        "format": "svg",
+        "include_source": true
+    },
+    "theme": {
+        "colors": {
+            "primary": "#1f77b4",
+            "secondary": "#ff7f0e",
+            "accent": "#2ca02c"
+        },
+        "fonts": {
+            "default": "Arial",
+            "monospace": "Consolas"
+        }
+    }
+} 

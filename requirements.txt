@@ -1,0 +1,21 @@
+# Core dependencies
+python-dotenv>=1.0.0
+pyyaml>=6.0.1
+jinja2>=3.1.2
+
+# File handling
+pathlib>=1.0.1
+chardet>=5.2.0
+
+# Diagram generation
+graphviz>=0.20.1
+mermaid-cli>=0.1.5
+
+# Testing
+pytest>=7.4.3
+pytest-cov>=4.1.0
+
+# Development
+black>=23.11.0
+flake8>=6.1.0
+isort>=5.12.0 

@@ -140,4 +140,45 @@ docs/_build/
 config/secrets.json
 config/credentials.json
 google-services.json
-GoogleService-Info.plist 
+GoogleService-Info.plist
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Virtual environments
+venv/
+env/
+.env/
+.venv/
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Output files
+outputs/
+*.out
+
+# Test coverage
+.coverage
+htmlcov/
+
+# Documentation builds
+docs/_build/
+
+# Environment variables
+.env
+
+# System files
+.DS_Store
+Thumbs.db 
