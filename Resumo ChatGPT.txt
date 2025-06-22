@@ -1,0 +1,126 @@
+Perfeito! Vamos estruturar esse app como um projeto completo. A ideia é criar um aplicativo educativo e gamificado que incentive crianças de 11 e 12 anos a realizarem tarefas domésticas de forma natural, com recompensas simbólicas (até R$10 por tarefa). Abaixo está o plano de desenvolvimento como se você fosse um desenvolvedor full stack:
+🧒 Nome do App
+
+TarefaMágica – Ajude em Casa e Ganhe Recompensas!
+📱 Funcionalidades Principais
+👨‍👩‍👧 Perfil Familiar
+
+    Admin (Pais/Responsáveis):
+
+        Criar tarefas.
+
+        Definir valores por tarefa (até R$10).
+
+        Aprovar ou não a realização da tarefa.
+
+        Histórico de tarefas e saldo de recompensas.
+
+    Criança (Usuário):
+
+        Ver tarefas disponíveis.
+
+        Marcar como feita (com foto ou vídeo opcional).
+
+        Acompanhar progresso e saldo de recompensas.
+
+        Personalizar avatar.
+
+🎮 Sistema de Gamificação
+
+    Níveis e Pontos:
+
+        Cada tarefa dá moedas e XP.
+
+        A cada nível, libera novos visuais para o avatar ou adesivos digitais.
+
+    Moedas Virtuais + Dinheiro Real:
+
+        R$10 máximo por tarefa (definido pelo responsável).
+
+        1 moeda virtual por R$1 ganho.
+
+        Moedas compram itens no app: roupinhas, fundos, adesivos, frases mágicas.
+
+💰 Exemplo de Tarefas e Recompensas
+Tarefa	Valor	Moedas
+Arrumar a cama	R$2	🪙2
+Lavar a louça do almoço	R$5	🪙5
+Guardar os brinquedos	R$1	🪙1
+Ajudar a colocar a mesa	R$3	🪙3
+Regar as plantas	R$2	🪙2
+Cuidar do pet (ração/limpeza)	R$4	🪙4
+🎨 Interface (UX/UI)
+
+    Visual colorido, amigável e mágico (elementos de fantasia como varinhas, estrelas, mascotes).
+
+    Botões grandes, fontes claras.
+
+    Modo claro e escuro.
+
+    Ícones de tarefas ilustrados.
+
+🛠️ Stack de Desenvolvimento
+Frontend (Mobile)
+
+    Framework: Flutter (para Android e iOS futuramente).
+
+    Design: Figma (protótipos), Material Design.
+
+Backend
+
+    Banco de Dados: Firebase Firestore (tempo real, autenticação, armazenamento).
+
+    Autenticação: Firebase Auth (e-mail ou login com código dos pais).
+
+    Funções Serverless: Firebase Functions para lógica de pontos, permissões, aprovações.
+
+🚀 Roadmap de Desenvolvimento
+🟢 Fase 1 – MVP (1 mês)
+
+    Cadastro de pais e filhos.
+
+    Adição de tarefas com valor.
+
+    Marcação de tarefa feita e aprovação.
+
+    Sistema de pontos e saldo.
+
+    Interface básica com visual divertido.
+
+🔵 Fase 2 – Gamificação (2-3 meses)
+
+    Sistema de níveis e conquistas.
+
+    Loja interna de itens estéticos.
+
+    Personalização de avatar.
+
+🟣 Fase 3 – Expansão
+
+    Tarefas recorrentes e lembretes.
+
+    Integração com PIX para pagamento real dos pais.
+
+    Rankings entre irmãos ou amigos (opcional).
+
+    Missões semanais com bônus.
+
+📦 Extras
+
+    Notificações push com lembretes mágicos.
+
+    Modo “Mascote ajudante” que dá dicas e elogios.
+
+    Estatísticas para os pais sobre hábitos e frequência.
+
+✅ Próximos Passos
+
+    Criar wireframes e design inicial no Figma.
+
+    Configurar Firebase e criar protótipo básico no Flutter.
+
+    Testar com crianças reais (beta fechado com familiares).
+
+    Publicar como app beta na Google Play.
+
+    Coletar feedback e iterar.
