@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TarefaMágica</string>
+    
+    <!-- Autenticação -->
+    <string name="login_title">Bem-vindo ao TarefaMágica!</string>
+    <string name="login_subtitle">Faça login para começar sua jornada mágica</string>
+    <string name="email">E-mail</string>
+    <string name="password">Senha</string>
+    <string name="login">Entrar</string>
+    <string name="register">Cadastrar</string>
+    <string name="forgot_password">Esqueci minha senha</string>
+    <string name="two_factor_title">Verificação em Duas Etapas</string>
+    <string name="two_factor_subtitle">Digite o código enviado para seu dispositivo</string>
+    <string name="verify">Verificar</string>
+    <string name="resend_code">Reenviar código</string>
+    
+    <!-- Dashboard -->
+    <string name="dashboard_title">TarefaMágica</string>
+    <string name="hello_user">Olá, %s!</string>
+    <string name="level_points">Nível %d • %d pontos</string>
+    <string name="quick_actions">Ações Rápidas</string>
+    <string name="tasks">Tarefas</string>
+    <string name="missions">Missões</string>
+    <string name="wallet">Carteira</string>
+    <string name="achievements">Conquistas</string>
+    <string name="daily_progress">Progresso do Dia</string>
+    <string name="tasks_completed">Tarefas Concluídas</string>
+    <string name="days_streak">Dias Seguidos</string>
+    <string name="upcoming_tasks">Próximas Tarefas</string>
+    <string name="no_pending_tasks">Nenhuma tarefa pendente!</string>
+    <string name="recent_achievements">Conquistas Recentes</string>
+    <string name="complete_tasks_for_achievements">Complete tarefas para desbloquear conquistas!</string>
+    
+    <!-- Tarefas -->
+    <string name="task_list_title">Tarefas Disponíveis</string>
+    <string name="task_detail_title">Detalhes da Tarefa</string>
+    <string name="task_reward">R$ %.2f</string>
+    <string name="task_complete">Concluir Tarefa</string>
+    <string name="task_upload_photo">Enviar Foto</string>
+    <string name="task_upload_video">Enviar Vídeo</string>
+    <string name="task_description">Descrição</string>
+    <string name="task_instructions">Instruções</string>
+    <string name="task_category">Categoria</string>
+    <string name="task_difficulty">Dificuldade</string>
+    <string name="task_deadline">Prazo</string>
+    
+    <!-- Gamificação -->
+    <string name="missions_title">Missões</string>
+    <string name="achievements_title">Conquistas</string>
+    <string name="leaderboard_title">Ranking</string>
+    <string name="level_up">Subiu de Nível!</string>
+    <string name="new_achievement">Nova Conquista!</string>
+    <string name="mission_completed">Missão Concluída!</string>
+    <string name="points_earned">+%d pontos</string>
+    <string name="coins_earned">+%d moedas</string>
+    
+    <!-- Carteira -->
+    <string name="wallet_title">Minha Carteira</string>
+    <string name="balance">Saldo</string>
+    <string name="balance_value">R$ %.2f</string>
+    <string name="virtual_coins">Moedas Virtuais</string>
+    <string name="virtual_coins_value">%d moedas</string>
+    <string name="transaction_history">Histórico de Transações</string>
+    <string name="withdraw_money">Sacar Dinheiro</string>
+    <string name="buy_virtual_items">Comprar Itens</string>
+    
+    <!-- Perfil -->
+    <string name="profile_title">Meu Perfil</string>
+    <string name="personal_info">Informações Pessoais</string>
+    <string name="name">Nome</string>
+    <string name="age">Idade</string>
+    <string name="avatar">Avatar</string>
+    <string name="settings">Configurações</string>
+    <string name="notifications">Notificações</string>
+    <string name="privacy">Privacidade</string>
+    <string name="logout">Sair</string>
+    <string name="logout_confirmation">Tem certeza que deseja sair?</string>
+    
+    <!-- Notificações -->
+    <string name="notification_task_reminder">Lembrete de Tarefa</string>
+    <string name="notification_achievement">Nova Conquista!</string>
+    <string name="notification_level_up">Subiu de Nível!</string>
+    <string name="notification_mission">Nova Missão Disponível</string>
+    <string name="notification_reward">Recompensa Disponível</string>
+    
+    <!-- Erros -->
+    <string name="error_network">Erro de conexão. Verifique sua internet.</string>
+    <string name="error_invalid_credentials">E-mail ou senha incorretos.</string>
+    <string name="error_invalid_code">Código inválido. Tente novamente.</string>
+    <string name="error_upload_failed">Falha no envio. Tente novamente.</string>
+    <string name="error_generic">Algo deu errado. Tente novamente.</string>
+    
+    <!-- Sucessos -->
+    <string name="success_login">Login realizado com sucesso!</string>
+    <string name="success_task_completed">Tarefa concluída com sucesso!</string>
+    <string name="success_upload">Arquivo enviado com sucesso!</string>
+    <string name="success_withdrawal">Saque realizado com sucesso!</string>
+    
+    <!-- Confirmações -->
+    <string name="confirm_task_completion">Confirmar conclusão da tarefa?</string>
+    <string name="confirm_withdrawal">Confirmar saque de R$ %.2f?</string>
+    <string name="confirm_logout">Confirmar saída?</string>
+    
+    <!-- Categorias de Tarefas -->
+    <string name="category_cleaning">Limpeza</string>
+    <string name="category_organization">Organização</string>
+    <string name="category_help">Ajuda Familiar</string>
+    <string name="category_study">Estudos</string>
+    <string name="category_creative">Criatividade</string>
+    <string name="category_outdoor">Ar Livre</string>
+    
+    <!-- Dificuldades -->
+    <string name="difficulty_easy">Fácil</string>
+    <string name="difficulty_medium">Médio</string>
+    <string name="difficulty_hard">Difícil</string>
+    <string name="difficulty_expert">Especialista</string>
+    
+    <!-- Acessibilidade -->
+    <string name="accessibility_profile_button">Botão de perfil</string>
+    <string name="accessibility_task_button">Botão de tarefa</string>
+    <string name="accessibility_mission_button">Botão de missão</string>
+    <string name="accessibility_wallet_button">Botão de carteira</string>
+    <string name="accessibility_achievement_button">Botão de conquista</string>
+    <string name="accessibility_back_button">Botão voltar</string>
+    <string name="accessibility_menu_button">Botão menu</string>
+    
+    <!-- Política de Privacidade -->
+    <string name="privacy_policy_title">Política de Privacidade</string>
+    <string name="privacy_policy_accept">Aceito a política de privacidade</string>
+    <string name="privacy_policy_read">Ler política de privacidade</string>
+    
+    <!-- Termos de Uso -->
+    <string name="terms_of_service_title">Termos de Uso</string>
+    <string name="terms_of_service_accept">Aceito os termos de uso</string>
+    <string name="terms_of_service_read">Ler termos de uso</string>
+    
+    <!-- LGPD -->
+    <string name="lgpd_consent_title">Consentimento LGPD</string>
+    <string name="lgpd_consent_message">Concordo com o processamento dos meus dados pessoais conforme a LGPD.</string>
+    <string name="lgpd_parental_consent">Consentimento dos Pais</string>
+    <string name="lgpd_parental_consent_message">Como responsável legal, autorizo o uso dos dados do meu filho(a).</string>
+    
+</resources> 
