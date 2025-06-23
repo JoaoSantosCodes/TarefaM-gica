@@ -1,0 +1,40 @@
+{
+  "backup_dir": "backups",
+  "retention_days": 30,
+  "max_backups": 100,
+  "backup_schedule": "02:00",
+  "backup_paths": [
+    "workflow/",
+    "outputs/",
+    "logs/",
+    "checklists/",
+    "docs/"
+  ],
+  "compression": true,
+  "encryption": false,
+  "notifications": {
+    "enabled": true,
+    "webhook_url": null,
+    "email": null
+  },
+  "monitoring": {
+    "enabled": true,
+    "check_interval": 3600,
+    "alert_on_failure": true,
+    "metrics_retention_days": 30
+  },
+  "alerts": {
+    "webhook_url": null,
+    "email": null,
+    "log_level": "INFO"
+  },
+  "thresholds": {
+    "disk_usage_warning": 80.0,
+    "disk_usage_critical": 95.0,
+    "backup_failure_threshold": 3,
+    "backup_age_warning": 24,
+    "backup_age_critical": 48,
+    "size_growth_warning": 50.0,
+    "size_growth_critical": 100.0
+  }
+} 

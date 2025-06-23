@@ -1,0 +1,13 @@
+[
+  {
+    "backup_id": "backup_20250622_235650_test",
+    "timestamp": "2025-06-22T23:56:50.547096",
+    "size_bytes": 878,
+    "file_path": "backups\\backup_20250622_235650_test.zip",
+    "backup_type": "test",
+    "status": "success",
+    "checksum": "50a5a25841aba8a09a4048e78cc3c4e4bb556e8b69de26a531e26e99a3a785b1",
+    "retention_days": 30,
+    "description": "Backup de teste"
+  }
+]

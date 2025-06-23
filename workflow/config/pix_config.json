@@ -1,0 +1,12 @@
+{
+  "merchant_id": "tarefamagica_merchant",
+  "pix_key": "pix@tarefamagica.com",
+  "pix_key_type": "email",
+  "api_url": "https://api.pix.example.com",
+  "api_key": "your_api_key_here",
+  "max_amount": 10.0,
+  "daily_limit": 50.0,
+  "monthly_limit": 200.0,
+  "webhook_url": "https://tarefamagica.com/webhook/pix",
+  "environment": "sandbox"
+}

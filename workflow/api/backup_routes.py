@@ -1,309 +1,460 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-Rotas da API para Sistema de Backup Seguro - TarefaMágica
+🔧 Rotas de Backup - TarefaMágica
+API para gerenciamento de backup e monitoramento
 """
 
 from flask import Blueprint, request, jsonify
 from datetime import datetime, timedelta
-from typing import Dict, List
-import logging
 import os
+import json
+from typing import Dict, Any, Optional
 
-from ..security.secure_backup import (
-    SecureBackup, BackupJob, BackupType, BackupStatus
-)
+# Importa módulos de backup
+from ..backup.automated_backup import AutomatedBackup
+from ..backup.backup_monitor import BackupMonitor
 
-# Configuração do blueprint
+# Cria blueprint
 backup_bp = Blueprint('backup', __name__, url_prefix='/api/backup')
 
-# Instância do sistema de backup
-backup_system = SecureBackup()
+# Instâncias globais
+backup_system = None
+backup_monitor = None
 
-@backup_bp.route('/jobs', methods=['POST'])
-def create_backup_job():
-    """
-    Cria um novo job de backup
+def init_backup_system():
+    """Inicializa sistema de backup"""
+    global backup_system, backup_monitor
     
-    Body:
-        source_paths: List[str]
-        backup_type: str (full, incremental, differential)
-        retention_days: int (opcional)
-    """
+    if backup_system is None:
+        backup_system = AutomatedBackup()
+    
+    if backup_monitor is None:
+        backup_monitor = BackupMonitor()
+        backup_monitor.start_monitoring()
+
+@backup_bp.route('/create', methods=['POST'])
+def create_backup():
+    """Cria novo backup"""
     try:
-        data = request.get_json()
+        init_backup_system()
         
-        if not data or 'source_paths' not in data:
-            return jsonify({
-                'success': False,
-                'error': 'source_paths é obrigatório'
-            }), 400
-            
-        source_paths = data['source_paths']
-        backup_type_str = data.get('backup_type', 'full')
-        retention_days = data.get('retention_days')
+        data = request.get_json() or {}
+        backup_type = data.get('backup_type', 'manual')
+        description = data.get('description', 'Backup manual via API')
         
-        # Valida tipo de backup
-        try:
-            backup_type = BackupType(backup_type_str)
-        except ValueError:
-            return jsonify({
-                'success': False,
-                'error': f'Tipo de backup inválido: {backup_type_str}'
-            }), 400
-            
-        # Cria job
-        job = backup_system.create_backup_job(
-            source_paths=source_paths,
+        result = backup_system.create_backup(
             backup_type=backup_type,
-            retention_days=retention_days
+            description=description
         )
         
-        return jsonify({
-            'success': True,
-            'job': {
-                'job_id': job.job_id,
-                'backup_type': job.backup_type.value,
-                'source_paths': job.source_paths,
-                'destination_path': job.destination_path,
-                'status': job.status.value,
-                'created_at': job.created_at.isoformat(),
-                'retention_days': job.retention_days
-            }
-        }), 201
-        
-    except Exception as e:
-        logging.error(f"Erro ao criar job de backup: {str(e)}")
-        return jsonify({
-            'success': False,
-            'error': 'Erro interno do servidor'
-        }), 500
-
-@backup_bp.route('/jobs/<job_id>/execute', methods=['POST'])
-def execute_backup(job_id: str):
-    """
-    Executa backup
-    
-    Args:
-        job_id: ID do job
-    """
-    try:
-        success = backup_system.execute_backup(job_id)
-        
-        if success:
+        if result["success"]:
             return jsonify({
-                'success': True,
-                'message': f'Backup {job_id} executado com sucesso'
-            }), 200
+                "success": True,
+                "message": "Backup criado com sucesso",
+                "backup_id": result["backup_id"],
+                "file_path": result["file_path"],
+                "size_bytes": result["size_bytes"],
+                "checksum": result["checksum"],
+                "copied_files": result["copied_files"]
+            }), 201
         else:
             return jsonify({
-                'success': False,
-                'error': f'Erro ao executar backup {job_id}'
+                "success": False,
+                "error": result["error"]
             }), 500
             
     except Exception as e:
-        logging.error(f"Erro ao executar backup: {str(e)}")
         return jsonify({
-            'success': False,
-            'error': 'Erro interno do servidor'
+            "success": False,
+            "error": f"Erro interno: {str(e)}"
         }), 500
 
-@backup_bp.route('/jobs', methods=['GET'])
+@backup_bp.route('/list', methods=['GET'])
 def list_backups():
-    """
-    Lista backups
-    
-    Query params:
-        status: str (opcional)
-    """
+    """Lista todos os backups"""
     try:
-        status_str = request.args.get('status')
-        status = None
+        init_backup_system()
         
-        if status_str:
-            try:
-                status = BackupStatus(status_str)
-            except ValueError:
-                return jsonify({
-                    'success': False,
-                    'error': f'Status inválido: {status_str}'
-                }), 400
-                
-        jobs = backup_system.list_backups(status)
+        result = backup_system.list_backups()
         
-        return jsonify({
-            'success': True,
-            'jobs': [
-                {
-                    'job_id': job.job_id,
-                    'backup_type': job.backup_type.value,
-                    'source_paths': job.source_paths,
-                    'destination_path': job.destination_path,
-                    'status': job.status.value,
-                    'created_at': job.created_at.isoformat(),
-                    'started_at': job.started_at.isoformat() if job.started_at else None,
-                    'completed_at': job.completed_at.isoformat() if job.completed_at else None,
-                    'file_count': job.file_count,
-                    'total_size': job.total_size,
-                    'checksum': job.checksum,
-                    'error_message': job.error_message,
-                    'retention_days': job.retention_days
-                }
-                for job in jobs
-            ]
-        }), 200
-        
-    except Exception as e:
-        logging.error(f"Erro ao listar backups: {str(e)}")
-        return jsonify({
-            'success': False,
-            'error': 'Erro interno do servidor'
-        }), 500
-
-@backup_bp.route('/jobs/<job_id>', methods=['GET'])
-def get_backup_job(job_id: str):
-    """
-    Obtém detalhes de um job de backup
-    """
-    try:
-        job = backup_system._load_backup_job(job_id)
-        
-        if not job:
+        if result["success"]:
             return jsonify({
-                'success': False,
-                'error': 'Job não encontrado'
-            }), 404
+                "success": True,
+                "backups": result["backups"],
+                "total": result["total"]
+            }), 200
+        else:
+            return jsonify({
+                "success": False,
+                "error": result["error"]
+            }), 500
             
-        return jsonify({
-            'success': True,
-            'job': {
-                'job_id': job.job_id,
-                'backup_type': job.backup_type.value,
-                'source_paths': job.source_paths,
-                'destination_path': job.destination_path,
-                'status': job.status.value,
-                'created_at': job.created_at.isoformat(),
-                'started_at': job.started_at.isoformat() if job.started_at else None,
-                'completed_at': job.completed_at.isoformat() if job.completed_at else None,
-                'file_count': job.file_count,
-                'total_size': job.total_size,
-                'checksum': job.checksum,
-                'error_message': job.error_message,
-                'retention_days': job.retention_days
-            }
-        }), 200
-        
     except Exception as e:
-        logging.error(f"Erro ao obter job: {str(e)}")
         return jsonify({
-            'success': False,
-            'error': 'Erro interno do servidor'
+            "success": False,
+            "error": f"Erro interno: {str(e)}"
         }), 500
 
-@backup_bp.route('/jobs/<job_id>/restore', methods=['POST'])
-def restore_backup(job_id: str):
-    """
-    Restaura backup
-    
-    Body:
-        destination_path: str
-    """
+@backup_bp.route('/restore/<backup_id>', methods=['POST'])
+def restore_backup(backup_id: str):
+    """Restaura backup específico"""
     try:
-        data = request.get_json()
+        init_backup_system()
         
-        if not data or 'destination_path' not in data:
+        data = request.get_json() or {}
+        restore_path = data.get('restore_path', f'restored_{backup_id}')
+        
+        result = backup_system.restore_backup(
+            backup_id=backup_id,
+            restore_path=restore_path
+        )
+        
+        if result["success"]:
             return jsonify({
-                'success': False,
-                'error': 'destination_path é obrigatório'
+                "success": True,
+                "message": "Backup restaurado com sucesso",
+                "backup_id": backup_id,
+                "restore_path": restore_path,
+                "restored_files": result["restored_files"],
+                "backup_timestamp": result["backup_timestamp"]
+            }), 200
+        else:
+            return jsonify({
+                "success": False,
+                "error": result["error"]
             }), 400
             
-        destination_path = data['destination_path']
-        
-        success = backup_system.restore_backup(job_id, destination_path)
-        
-        if success:
-            return jsonify({
-                'success': True,
-                'message': f'Backup {job_id} restaurado com sucesso'
-            }), 200
-        else:
-            return jsonify({
-                'success': False,
-                'error': f'Erro ao restaurar backup {job_id}'
-            }), 500
-            
     except Exception as e:
-        logging.error(f"Erro ao restaurar backup: {str(e)}")
         return jsonify({
-            'success': False,
-            'error': 'Erro interno do servidor'
+            "success": False,
+            "error": f"Erro interno: {str(e)}"
+        }), 500
+
+@backup_bp.route('/delete/<backup_id>', methods=['DELETE'])
+def delete_backup(backup_id: str):
+    """Remove backup específico"""
+    try:
+        init_backup_system()
+        
+        # Encontra backup
+        list_result = backup_system.list_backups()
+        if not list_result["success"]:
+            return jsonify({
+                "success": False,
+                "error": "Erro ao listar backups"
+            }), 500
+        
+        backup_found = None
+        for backup in list_result["backups"]:
+            if backup["backup_id"] == backup_id:
+                backup_found = backup
+                break
+        
+        if not backup_found:
+            return jsonify({
+                "success": False,
+                "error": f"Backup {backup_id} não encontrado"
+            }), 404
+        
+        # Remove arquivo
+        backup_file = backup_found.get("file_path")
+        if backup_file and os.path.exists(backup_file):
+            os.remove(backup_file)
+        
+        return jsonify({
+            "success": True,
+            "message": f"Backup {backup_id} removido com sucesso"
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": f"Erro interno: {str(e)}"
         }), 500
 
 @backup_bp.route('/cleanup', methods=['POST'])
-def cleanup_old_backups():
-    """
-    Remove backups antigos
-    """
+def cleanup_backups():
+    """Remove backups antigos"""
     try:
-        removed_count = backup_system.cleanup_old_backups()
+        init_backup_system()
+        
+        result = backup_system.cleanup_old_backups()
+        
+        if result["success"]:
+            return jsonify({
+                "success": True,
+                "message": "Limpeza concluída",
+                "removed_count": result["removed_count"],
+                "cutoff_date": result["cutoff_date"]
+            }), 200
+        else:
+            return jsonify({
+                "success": False,
+                "error": result["error"]
+            }), 500
+            
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": f"Erro interno: {str(e)}"
+        }), 500
+
+@backup_bp.route('/metrics', methods=['GET'])
+def get_backup_metrics():
+    """Obtém métricas de backup"""
+    try:
+        init_backup_system()
+        
+        result = backup_monitor.get_metrics()
+        
+        if result["success"]:
+            return jsonify({
+                "success": True,
+                "metrics": result["metrics"]
+            }), 200
+        else:
+            return jsonify({
+                "success": False,
+                "error": result["error"]
+            }), 500
+            
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": f"Erro interno: {str(e)}"
+        }), 500
+
+@backup_bp.route('/alerts', methods=['GET'])
+def get_alerts():
+    """Obtém alertas de backup"""
+    try:
+        init_backup_system()
+        
+        # Parâmetros de filtro
+        level = request.args.get('level')
+        resolved = request.args.get('resolved')
+        
+        if resolved is not None:
+            resolved = resolved.lower() == 'true'
+        
+        alerts = backup_monitor.get_alerts(level=level, resolved=resolved)
         
         return jsonify({
-            'success': True,
-            'message': f'{removed_count} backups antigos removidos',
-            'removed_count': removed_count
+            "success": True,
+            "alerts": alerts,
+            "total": len(alerts)
         }), 200
         
     except Exception as e:
-        logging.error(f"Erro ao limpar backups: {str(e)}")
         return jsonify({
-            'success': False,
-            'error': 'Erro interno do servidor'
+            "success": False,
+            "error": f"Erro interno: {str(e)}"
+        }), 500
+
+@backup_bp.route('/alerts/<alert_id>/resolve', methods=['POST'])
+def resolve_alert(alert_id: str):
+    """Resolve alerta específico"""
+    try:
+        init_backup_system()
+        
+        data = request.get_json() or {}
+        resolution_message = data.get('resolution_message', 'Resolvido via API')
+        
+        success = backup_monitor.resolve_alert(alert_id, resolution_message)
+        
+        if success:
+            return jsonify({
+                "success": True,
+                "message": f"Alerta {alert_id} resolvido com sucesso"
+            }), 200
+        else:
+            return jsonify({
+                "success": False,
+                "error": f"Alerta {alert_id} não encontrado ou já resolvido"
+            }), 404
+            
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": f"Erro interno: {str(e)}"
+        }), 500
+
+@backup_bp.route('/config', methods=['GET'])
+def get_backup_config():
+    """Obtém configuração de backup"""
+    try:
+        init_backup_system()
+        
+        config = backup_system.config
+        
+        return jsonify({
+            "success": True,
+            "config": config
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": f"Erro interno: {str(e)}"
+        }), 500
+
+@backup_bp.route('/config', methods=['PUT'])
+def update_backup_config():
+    """Atualiza configuração de backup"""
+    try:
+        init_backup_system()
+        
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                "success": False,
+                "error": "Dados de configuração não fornecidos"
+            }), 400
+        
+        # Atualiza configuração
+        backup_system.config.update(data)
+        
+        # Salva configuração
+        config_dir = os.path.dirname(backup_system.config_path)
+        os.makedirs(config_dir, exist_ok=True)
+        
+        with open(backup_system.config_path, 'w') as f:
+            json.dump(backup_system.config, f, indent=2)
+        
+        return jsonify({
+            "success": True,
+            "message": "Configuração atualizada com sucesso",
+            "config": backup_system.config
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": f"Erro interno: {str(e)}"
         }), 500
 
 @backup_bp.route('/status', methods=['GET'])
 def get_backup_status():
-    """
-    Obtém status do sistema de backup
-    """
+    """Obtém status geral do sistema de backup"""
     try:
-        # Obtém estatísticas
-        all_jobs = backup_system.list_backups()
+        init_backup_system()
         
-        total_jobs = len(all_jobs)
-        completed_jobs = len([j for j in all_jobs if j.status == BackupStatus.COMPLETED])
-        failed_jobs = len([j for j in all_jobs if j.status == BackupStatus.FAILED])
-        pending_jobs = len([j for j in all_jobs if j.status == BackupStatus.PENDING])
+        # Status do monitor
+        monitor_status = {
+            "active": backup_monitor.monitoring_active,
+            "thread_alive": backup_monitor.monitor_thread.is_alive() if backup_monitor.monitor_thread else False
+        }
         
-        # Calcula tamanho total dos backups
-        total_size = sum([j.total_size for j in all_jobs if j.total_size])
+        # Métricas básicas
+        metrics_result = backup_monitor.get_metrics()
+        metrics = metrics_result.get("metrics", {}) if metrics_result["success"] else {}
         
-        # Último backup
-        last_backup = None
-        if completed_jobs > 0:
-            completed_jobs_list = [j for j in all_jobs if j.status == BackupStatus.COMPLETED]
-            last_backup = max(completed_jobs_list, key=lambda x: x.completed_at)
-            
+        # Alertas ativos
+        active_alerts = backup_monitor.get_alerts(resolved=False)
+        
+        # Status do disco
+        import psutil
+        disk_usage = psutil.disk_usage(backup_system.backup_dir)
+        disk_status = {
+            "total_bytes": disk_usage.total,
+            "used_bytes": disk_usage.used,
+            "free_bytes": disk_usage.free,
+            "usage_percent": (disk_usage.used / disk_usage.total) * 100
+        }
+        
         return jsonify({
-            'success': True,
-            'status': {
-                'total_jobs': total_jobs,
-                'completed_jobs': completed_jobs,
-                'failed_jobs': failed_jobs,
-                'pending_jobs': pending_jobs,
-                'success_rate': (completed_jobs / total_jobs * 100) if total_jobs > 0 else 0,
-                'total_size_bytes': total_size,
-                'total_size_mb': total_size / (1024 * 1024) if total_size else 0,
-                'last_backup': {
-                    'job_id': last_backup.job_id,
-                    'completed_at': last_backup.completed_at.isoformat(),
-                    'file_count': last_backup.file_count,
-                    'total_size': last_backup.total_size
-                } if last_backup else None,
-                'scheduler_active': backup_system.scheduler_active
+            "success": True,
+            "status": {
+                "monitor": monitor_status,
+                "metrics": metrics,
+                "active_alerts": len(active_alerts),
+                "disk": disk_status,
+                "last_check": datetime.now().isoformat()
             }
         }), 200
         
     except Exception as e:
-        logging.error(f"Erro ao obter status: {str(e)}")
         return jsonify({
-            'success': False,
-            'error': 'Erro interno do servidor'
-        }), 500 
+            "success": False,
+            "error": f"Erro interno: {str(e)}"
+        }), 500
+
+@backup_bp.route('/health', methods=['GET'])
+def backup_health_check():
+    """Verificação de saúde do sistema de backup"""
+    try:
+        init_backup_system()
+        
+        health_status = {
+            "status": "healthy",
+            "checks": {}
+        }
+        
+        # Verifica se monitor está ativo
+        if not backup_monitor.monitoring_active:
+            health_status["status"] = "warning"
+            health_status["checks"]["monitor"] = "inactive"
+        else:
+            health_status["checks"]["monitor"] = "active"
+        
+        # Verifica uso do disco
+        import psutil
+        disk_usage = psutil.disk_usage(backup_system.backup_dir)
+        usage_percent = (disk_usage.used / disk_usage.total) * 100
+        
+        if usage_percent > 95:
+            health_status["status"] = "critical"
+            health_status["checks"]["disk"] = f"critical ({usage_percent:.1f}%)"
+        elif usage_percent > 80:
+            health_status["status"] = "warning"
+            health_status["checks"]["disk"] = f"warning ({usage_percent:.1f}%)"
+        else:
+            health_status["checks"]["disk"] = f"ok ({usage_percent:.1f}%)"
+        
+        # Verifica alertas críticos
+        critical_alerts = backup_monitor.get_alerts(level="critical", resolved=False)
+        if critical_alerts:
+            health_status["status"] = "critical"
+            health_status["checks"]["alerts"] = f"critical ({len(critical_alerts)} alerts)"
+        else:
+            health_status["checks"]["alerts"] = "ok"
+        
+        # Verifica último backup
+        metrics_result = backup_monitor.get_metrics()
+        if metrics_result["success"]:
+            metrics = metrics_result["metrics"]
+            if metrics.get("last_backup_time"):
+                last_backup = datetime.fromisoformat(metrics["last_backup_time"])
+                hours_since_backup = (datetime.now() - last_backup).total_seconds() / 3600
+                
+                if hours_since_backup > 48:
+                    health_status["status"] = "critical"
+                    health_status["checks"]["last_backup"] = f"critical ({hours_since_backup:.1f}h ago)"
+                elif hours_since_backup > 24:
+                    health_status["status"] = "warning"
+                    health_status["checks"]["last_backup"] = f"warning ({hours_since_backup:.1f}h ago)"
+                else:
+                    health_status["checks"]["last_backup"] = f"ok ({hours_since_backup:.1f}h ago)"
+            else:
+                health_status["checks"]["last_backup"] = "no_backups"
+        else:
+            health_status["checks"]["last_backup"] = "error"
+        
+        return jsonify({
+            "success": True,
+            "health": health_status,
+            "timestamp": datetime.now().isoformat()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": f"Erro interno: {str(e)}"
+        }), 500
+
+# Registra blueprint
+def register_backup_routes(app):
+    """Registra rotas de backup na aplicação"""
+    app.register_blueprint(backup_bp)
+    return backup_bp 

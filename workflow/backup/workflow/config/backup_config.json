@@ -1,0 +1,25 @@
+{
+  "backup_dir": "backups",
+  "retention_days": 30,
+  "max_backups": 100,
+  "backup_schedule": "02:00",
+  "backup_paths": [
+    "workflow/",
+    "outputs/",
+    "logs/",
+    "checklists/",
+    "docs/"
+  ],
+  "compression": true,
+  "encryption": false,
+  "notifications": {
+    "enabled": true,
+    "webhook_url": null,
+    "email": null
+  },
+  "monitoring": {
+    "enabled": true,
+    "check_interval": 3600,
+    "alert_on_failure": true
+  }
+}

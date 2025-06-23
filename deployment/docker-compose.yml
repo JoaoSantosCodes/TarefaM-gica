@@ -1,0 +1,146 @@
+version: '3.8'
+
+services:
+  # 🚀 APLICAÇÃO PRINCIPAL
+  tarefamagica-app:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile
+    container_name: tarefamagica-app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - DATABASE_URL=${DATABASE_URL}
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+    depends_on:
+      - tarefamagica-db
+      - tarefamagica-redis
+    networks:
+      - tarefamagica-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 🗄️ BANCO DE DADOS
+  tarefamagica-db:
+    image: postgres:15-alpine
+    container_name: tarefamagica-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${DB_NAME:-tarefamagica}
+      - POSTGRES_USER=${DB_USER:-tarefamagica}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-secure_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./deployment/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - tarefamagica-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-tarefamagica}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🔄 REDIS (CACHE E SESSÕES)
+  tarefamagica-redis:
+    image: redis:7-alpine
+    container_name: tarefamagica-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_password}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - tarefamagica-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 📊 MONITORAMENTO
+  tarefamagica-monitoring:
+    build:
+      context: .
+      dockerfile: deployment/monitoring.Dockerfile
+    container_name: tarefamagica-monitoring
+    restart: unless-stopped
+    environment:
+      - MONITORING_INTERVAL=${MONITORING_INTERVAL:-60}
+      - ALERT_WEBHOOK_URL=${ALERT_WEBHOOK_URL}
+    volumes:
+      - ./monitoring:/app/monitoring
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - tarefamagica-app
+    networks:
+      - tarefamagica-network
+
+  # 🔒 NGINX (REVERSE PROXY)
+  tarefamagica-nginx:
+    image: nginx:alpine
+    container_name: tarefamagica-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deployment/nginx.conf:/etc/nginx/nginx.conf
+      - ./deployment/ssl:/etc/nginx/ssl
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - tarefamagica-app
+    networks:
+      - tarefamagica-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 📋 BACKUP AUTOMÁTICO
+  tarefamagica-backup:
+    build:
+      context: .
+      dockerfile: deployment/backup.Dockerfile
+    container_name: tarefamagica-backup
+    restart: unless-stopped
+    environment:
+      - BACKUP_SCHEDULE=${BACKUP_SCHEDULE:-0 2 * * *}
+      - BACKUP_RETENTION_DAYS=${BACKUP_RETENTION_DAYS:-30}
+      - BACKUP_S3_BUCKET=${BACKUP_S3_BUCKET}
+      - BACKUP_S3_ACCESS_KEY=${BACKUP_S3_ACCESS_KEY}
+      - BACKUP_S3_SECRET_KEY=${BACKUP_S3_SECRET_KEY}
+    volumes:
+      - ./backups:/app/backups
+      - postgres_data:/var/lib/postgresql/data:ro
+    depends_on:
+      - tarefamagica-db
+    networks:
+      - tarefamagica-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  tarefamagica-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16 

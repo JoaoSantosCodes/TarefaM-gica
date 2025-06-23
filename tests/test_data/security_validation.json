@@ -1,0 +1,9 @@
+{
+  "validation_id": "security_1750646091.875644",
+  "parent_id": "parent_001",
+  "consent_valid": true,
+  "age_appropriate": true,
+  "transaction_limit_ok": true,
+  "risk_level": "low",
+  "validation_time": "2025-06-22T23:34:51.875644"
+}

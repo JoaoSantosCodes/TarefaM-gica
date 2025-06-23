@@ -2,16 +2,19 @@
 Rotas da API para sistema financeiro
 """
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from typing import Dict, List, Optional
+from datetime import datetime, timedelta
 
 from ..security.financial_security import FinancialSecurity, Transaction, TransactionStatus, RiskLevel
 from .mobile_security import get_api_key
 from ..security.input_validation import InputValidation
+from workflow.financial.pix_integration import PIXIntegration
 
 router = APIRouter(prefix="/financial", tags=["financial"])
 financial_security = FinancialSecurity()
+pix = PIXIntegration()
 
 class CreateTransactionRequest(BaseModel):
     parent_id: str
@@ -672,4 +675,46 @@ async def get_user_limits(
         return {
             "success": False,
             "error": "Erro interno do servidor"
-        }, 500 
+        }, 500
+
+@router.post("/pix", tags=["PIX"])
+def criar_transacao_pix(parent_id: str, child_id: str, amount: float, description: str):
+    """Cria uma nova transação PIX e retorna QR Code"""
+    result = pix.create_pix_transaction(parent_id, child_id, amount, description)
+    if not result["success"]:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
+
+@router.get("/pix/{transaction_id}", tags=["PIX"])
+def consultar_status_pix(transaction_id: str):
+    """Consulta status de uma transação PIX"""
+    result = pix.check_transaction_status(transaction_id)
+    if not result["success"]:
+        raise HTTPException(status_code=404, detail=result["error"])
+    return result
+
+@router.post("/pix/{transaction_id}/cancel", tags=["PIX"])
+def cancelar_transacao_pix(transaction_id: str, parent_id: str):
+    """Cancela uma transação PIX"""
+    result = pix.cancel_transaction(transaction_id, parent_id)
+    if not result["success"]:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
+
+@router.get("/pix/historico/{parent_id}", tags=["PIX"])
+def historico_pix(parent_id: str, limit: int = Query(50, le=100)):
+    """Obtém histórico de transações PIX do responsável"""
+    result = pix.get_transaction_history(parent_id, limit)
+    if not result["success"]:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
+
+@router.get("/pix/relatorio/{parent_id}", tags=["PIX"])
+def relatorio_financeiro_pix(parent_id: str, dias: int = Query(30, ge=1, le=365)):
+    """Gera relatório financeiro PIX do responsável"""
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=dias)
+    result = pix.generate_financial_report(parent_id, start_date, end_date)
+    if not result["success"]:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result 
