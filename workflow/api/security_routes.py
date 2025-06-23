@@ -12,6 +12,10 @@ import json
 from ..security.security_monitoring import (
     SecurityMonitoring, SecurityAlert, AlertLevel, AlertType
 )
+from ..security.rate_limiting import rate_limiter, RateLimitType
+from ..security.security_headers import security_headers
+from ..security.ssl_validation import ssl_validator
+from ..security.input_validation import InputValidation
 
 # Configuração do blueprint
 security_bp = Blueprint('security', __name__, url_prefix='/api/security')
@@ -450,6 +454,436 @@ def get_security_status():
         
     except Exception as e:
         logging.error(f"Erro ao obter status: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Erro interno do servidor'
+        }), 500
+
+@security_bp.route('/rate-limit/check', methods=['POST'])
+def check_rate_limit():
+    """
+    Verifica rate limit para uma ação
+    
+    Body:
+        identifier: str
+        limit_type: str
+    """
+    try:
+        data = request.get_json()
+        
+        # Validação dos dados de entrada
+        if not data:
+            return jsonify({
+                'success': False,
+                'error': 'Dados obrigatórios não fornecidos'
+            }), 400
+            
+        # Validação dos campos obrigatórios
+        required_fields = ['identifier', 'limit_type']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({
+                    'success': False,
+                    'error': f'Campo obrigatório ausente: {field}'
+                }), 400
+        
+        # Sanitização dos dados
+        identifier = InputValidation.sanitize_string(data['identifier'], max_length=200)
+        limit_type_str = InputValidation.sanitize_string(data['limit_type'], max_length=50)
+        
+        # Validação do tipo de limite
+        try:
+            limit_type = RateLimitType(limit_type_str)
+        except ValueError:
+            allowed_types = [lt.value for lt in RateLimitType]
+            return jsonify({
+                'success': False,
+                'error': f'Tipo de limite inválido. Tipos permitidos: {", ".join(allowed_types)}'
+            }), 400
+        
+        # Verifica rate limit
+        allowed, message = rate_limiter.check_rate_limit(identifier, limit_type)
+        
+        return jsonify({
+            'success': True,
+            'allowed': allowed,
+            'message': message,
+            'identifier': identifier,
+            'limit_type': limit_type.value
+        }), 200
+        
+    except ValueError as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    except Exception as e:
+        logging.error(f"Erro ao verificar rate limit: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Erro interno do servidor'
+        }), 500
+
+@security_bp.route('/rate-limit/status/<identifier>/<limit_type>', methods=['GET'])
+def get_rate_limit_status(identifier: str, limit_type: str):
+    """
+    Obtém status do rate limit para um identificador
+    
+    Args:
+        identifier: Identificador único
+        limit_type: Tipo de limite
+    """
+    try:
+        # Sanitização dos parâmetros
+        identifier = InputValidation.sanitize_string(identifier, max_length=200)
+        limit_type_str = InputValidation.sanitize_string(limit_type, max_length=50)
+        
+        # Validação do tipo de limite
+        try:
+            limit_type_enum = RateLimitType(limit_type_str)
+        except ValueError:
+            allowed_types = [lt.value for lt in RateLimitType]
+            return jsonify({
+                'success': False,
+                'error': f'Tipo de limite inválido. Tipos permitidos: {", ".join(allowed_types)}'
+            }), 400
+        
+        # Obtém status
+        status = rate_limiter.get_status(identifier, limit_type_enum)
+        
+        return jsonify({
+            'success': True,
+            'status': status
+        }), 200
+        
+    except ValueError as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    except Exception as e:
+        logging.error(f"Erro ao obter status do rate limit: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Erro interno do servidor'
+        }), 500
+
+@security_bp.route('/rate-limit/reset', methods=['POST'])
+def reset_rate_limit():
+    """
+    Reseta rate limit para um identificador
+    
+    Body:
+        identifier: str
+        limit_type: str (opcional)
+    """
+    try:
+        data = request.get_json()
+        
+        # Validação dos dados de entrada
+        if not data or 'identifier' not in data:
+            return jsonify({
+                'success': False,
+                'error': 'identifier é obrigatório'
+            }), 400
+        
+        # Sanitização dos dados
+        identifier = InputValidation.sanitize_string(data['identifier'], max_length=200)
+        limit_type_str = InputValidation.sanitize_string(data.get('limit_type', ''), max_length=50)
+        
+        # Validação do tipo de limite (se fornecido)
+        limit_type = None
+        if limit_type_str:
+            try:
+                limit_type = RateLimitType(limit_type_str)
+            except ValueError:
+                allowed_types = [lt.value for lt in RateLimitType]
+                return jsonify({
+                    'success': False,
+                    'error': f'Tipo de limite inválido. Tipos permitidos: {", ".join(allowed_types)}'
+                }), 400
+        
+        # Reseta rate limit
+        rate_limiter.reset_limits(identifier, limit_type)
+        
+        return jsonify({
+            'success': True,
+            'message': f'Rate limit resetado para {identifier}',
+            'identifier': identifier,
+            'limit_type': limit_type.value if limit_type else 'all'
+        }), 200
+        
+    except ValueError as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    except Exception as e:
+        logging.error(f"Erro ao resetar rate limit: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Erro interno do servidor'
+        }), 500
+
+@security_bp.route('/rate-limit/statistics', methods=['GET'])
+def get_rate_limit_statistics():
+    """
+    Obtém estatísticas do sistema de rate limiting
+    """
+    try:
+        statistics = rate_limiter.get_statistics()
+        
+        return jsonify({
+            'success': True,
+            'statistics': statistics
+        }), 200
+        
+    except Exception as e:
+        logging.error(f"Erro ao obter estatísticas: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Erro interno do servidor'
+        }), 500
+
+@security_bp.route('/ssl/validate', methods=['POST'])
+def validate_ssl_certificate():
+    """
+    Valida certificado SSL de um hostname
+    
+    Body:
+        hostname: str
+        port: int (opcional, padrão: 443)
+    """
+    try:
+        data = request.get_json()
+        
+        # Validação dos dados de entrada
+        if not data or 'hostname' not in data:
+            return jsonify({
+                'success': False,
+                'error': 'hostname é obrigatório'
+            }), 400
+        
+        # Sanitização dos dados
+        hostname = InputValidation.sanitize_string(data['hostname'], max_length=255)
+        port = InputValidation.sanitize_int(data.get('port', 443), min_value=1, max_value=65535)
+        
+        # Valida certificado
+        cert_info = ssl_validator.get_certificate_info(hostname, port)
+        
+        return jsonify({
+            'success': True,
+            'certificate': cert_info
+        }), 200
+        
+    except ValueError as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    except Exception as e:
+        logging.error(f"Erro ao validar certificado SSL: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Erro interno do servidor'
+        }), 500
+
+@security_bp.route('/ssl/health', methods=['GET'])
+def check_ssl_health():
+    """
+    Verifica saúde dos certificados SSL dos domínios confiáveis
+    """
+    try:
+        health_report = ssl_validator.check_certificate_health()
+        
+        return jsonify({
+            'success': True,
+            'health_report': health_report
+        }), 200
+        
+    except Exception as e:
+        logging.error(f"Erro ao verificar saúde SSL: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Erro interno do servidor'
+        }), 500
+
+@security_bp.route('/ssl/secure-request', methods=['POST'])
+def make_secure_request():
+    """
+    Faz requisição HTTP segura com validação SSL
+    
+    Body:
+        url: str
+        method: str (opcional, padrão: GET)
+        headers: dict (opcional)
+        data: dict (opcional)
+        timeout: int (opcional, padrão: 30)
+    """
+    try:
+        data = request.get_json()
+        
+        # Validação dos dados de entrada
+        if not data or 'url' not in data:
+            return jsonify({
+                'success': False,
+                'error': 'url é obrigatória'
+            }), 400
+        
+        # Sanitização dos dados
+        url = InputValidation.sanitize_string(data['url'], max_length=2000)
+        method = InputValidation.sanitize_string(data.get('method', 'GET'), max_length=10).upper()
+        timeout = InputValidation.sanitize_int(data.get('timeout', 30), min_value=1, max_value=300)
+        
+        # Validação do método HTTP
+        allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS']
+        if method not in allowed_methods:
+            return jsonify({
+                'success': False,
+                'error': f'Método HTTP inválido. Métodos permitidos: {", ".join(allowed_methods)}'
+            }), 400
+        
+        # Sanitização dos headers (se fornecidos)
+        headers = None
+        if 'headers' in data and isinstance(data['headers'], dict):
+            headers = {}
+            for key, value in data['headers'].items():
+                sanitized_key = InputValidation.sanitize_string(key, max_length=100)
+                sanitized_value = InputValidation.sanitize_string(str(value), max_length=1000)
+                headers[sanitized_key] = sanitized_value
+        
+        # Sanitização dos dados (se fornecidos)
+        request_data = None
+        if 'data' in data and isinstance(data['data'], dict):
+            request_data = {}
+            for key, value in data['data'].items():
+                sanitized_key = InputValidation.sanitize_string(key, max_length=100)
+                if isinstance(value, (str, int, float, bool)):
+                    request_data[sanitized_key] = value
+                else:
+                    request_data[sanitized_key] = InputValidation.sanitize_string(str(value), max_length=1000)
+        
+        # Faz requisição segura
+        success, response, errors = ssl_validator.make_secure_request(
+            url=url,
+            method=method,
+            headers=headers,
+            data=request_data,
+            timeout=timeout
+        )
+        
+        if success and response:
+            return jsonify({
+                'success': True,
+                'response': {
+                    'status_code': response.status_code,
+                    'headers': dict(response.headers),
+                    'content': response.text[:1000] if response.text else None,
+                    'url': response.url
+                }
+            }), 200
+        else:
+            return jsonify({
+                'success': False,
+                'error': 'Falha na requisição segura',
+                'errors': errors
+            }), 400
+        
+    except ValueError as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    except Exception as e:
+        logging.error(f"Erro ao fazer requisição segura: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Erro interno do servidor'
+        }), 500
+
+@security_bp.route('/ssl/validate-webhook', methods=['POST'])
+def validate_webhook_url():
+    """
+    Valida URL de webhook para uso seguro
+    
+    Body:
+        url: str
+    """
+    try:
+        data = request.get_json()
+        
+        # Validação dos dados de entrada
+        if not data or 'url' not in data:
+            return jsonify({
+                'success': False,
+                'error': 'url é obrigatória'
+            }), 400
+        
+        # Sanitização dos dados
+        url = InputValidation.sanitize_string(data['url'], max_length=2000)
+        
+        # Valida webhook
+        is_valid, errors = ssl_validator.validate_webhook_url(url)
+        
+        return jsonify({
+            'success': True,
+            'valid': is_valid,
+            'errors': errors,
+            'url': url
+        }), 200
+        
+    except ValueError as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    except Exception as e:
+        logging.error(f"Erro ao validar webhook: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Erro interno do servidor'
+        }), 500
+
+@security_bp.route('/headers/report', methods=['GET'])
+def get_security_headers_report():
+    """
+    Obtém relatório de headers de segurança
+    """
+    try:
+        report = security_headers.get_security_report()
+        
+        return jsonify({
+            'success': True,
+            'report': report
+        }), 200
+        
+    except Exception as e:
+        logging.error(f"Erro ao obter relatório de headers: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Erro interno do servidor'
+        }), 500
+
+@security_bp.route('/headers/test', methods=['GET'])
+def test_security_headers():
+    """
+    Endpoint de teste para verificar headers de segurança
+    """
+    try:
+        response = jsonify({
+            'success': True,
+            'message': 'Headers de segurança aplicados com sucesso',
+            'timestamp': datetime.utcnow().isoformat()
+        })
+        
+        # Aplica headers de segurança
+        response = security_headers.add_security_headers(response)
+        response = security_headers.add_cache_headers(response, 'no-cache')
+        
+        return response, 200
+        
+    except Exception as e:
+        logging.error(f"Erro ao testar headers de segurança: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Erro interno do servidor'
