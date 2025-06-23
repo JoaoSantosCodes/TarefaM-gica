@@ -33,7 +33,7 @@ sealed class Screen(val route: String) {
     }
     
     // Tarefas
-    object TaskList : Screen("tasks") {
+    object Tasks : Screen("tasks") {
         val arguments = listOf(
             navArgument("userId") { type = NavType.StringType }
         )
@@ -67,6 +67,22 @@ sealed class Screen(val route: String) {
     }
     
     object Pix : Screen("pix") {
+        val arguments = listOf(
+            navArgument("userId") { type = NavType.StringType }
+        )
+        
+        fun createRoute(userId: String) = "$route/$userId"
+    }
+    
+    object Notifications : Screen("notifications") {
+        val arguments = listOf(
+            navArgument("userId") { type = NavType.StringType }
+        )
+        
+        fun createRoute(userId: String) = "$route/$userId"
+    }
+    
+    object Reports : Screen("reports") {
         val arguments = listOf(
             navArgument("userId") { type = NavType.StringType }
         )

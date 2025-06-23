@@ -14,7 +14,9 @@ import com.tarefamagica.app.presentation.screens.gamification.AchievementsScreen
 import com.tarefamagica.app.presentation.screens.gamification.LeaderboardScreen
 import com.tarefamagica.app.presentation.screens.gamification.MissionsScreen
 import com.tarefamagica.app.presentation.screens.levels.LevelsScreen
+import com.tarefamagica.app.presentation.screens.notifications.NotificationsScreen
 import com.tarefamagica.app.presentation.screens.profile.ProfileScreen
+import com.tarefamagica.app.presentation.screens.reports.ReportsScreen
 import com.tarefamagica.app.presentation.screens.tasks.TaskDetailScreen
 import com.tarefamagica.app.presentation.screens.tasks.TaskListScreen
 import com.tarefamagica.app.presentation.screens.tasks.TasksScreen
@@ -118,6 +120,12 @@ fun TarefaMagicaNavigation(
                 },
                 onNavigateToPix = { dashboardUserId ->
                     navController.navigate(Screen.Pix.createRoute(dashboardUserId))
+                },
+                onNavigateToNotifications = { dashboardUserId ->
+                    navController.navigate(Screen.Notifications.createRoute(dashboardUserId))
+                },
+                onNavigateToReports = { dashboardUserId ->
+                    navController.navigate(Screen.Reports.createRoute(dashboardUserId))
                 },
                 onLogout = {
                     navController.navigate(Screen.Login.route) {
@@ -255,6 +263,32 @@ fun TarefaMagicaNavigation(
         // Carteira e Finanças
         composable(Screen.Wallet.route) {
             WalletScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        
+        // Notifications Screen
+        composable(
+            route = Screen.Notifications.route,
+            arguments = Screen.Notifications.arguments
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId") ?: ""
+            NotificationsScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        
+        // Reports Screen
+        composable(
+            route = Screen.Reports.route,
+            arguments = Screen.Reports.arguments
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId") ?: ""
+            ReportsScreen(
                 onNavigateBack = {
                     navController.popBackStack()
                 }
