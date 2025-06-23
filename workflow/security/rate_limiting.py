@@ -103,12 +103,14 @@ class RateLimiter:
         with self.lock:
             for key, entry in self.entries.items():
                 # Verifica se a janela de tempo expirou
-                if current_time - entry.first_attempt > timedelta(seconds=self._get_config(key).window_seconds):
+                config = self._get_config(key)
+                if current_time - entry.first_attempt > timedelta(seconds=config.window_seconds):
                     expired_keys.append(key)
                     
         # Remove entradas expiradas
         for key in expired_keys:
             del self.entries[key]
+            logging.info(f"Entrada expirada removida: {key}")
             
     def _get_config(self, key: str) -> RateLimitConfig:
         """Obtém configuração baseada na chave"""
@@ -149,20 +151,21 @@ class RateLimiter:
                 
                 entry = self.entries[key]
                 
-                # Verifica se está bloqueado
-                if entry.blocked_until and current_time < entry.blocked_until:
-                    remaining_time = entry.blocked_until - current_time
-                    return False, f"Bloqueado por {int(remaining_time.total_seconds())} segundos"
-                
-                # Verifica se a janela de tempo expirou
+                # Verifica se a janela de tempo expirou - CORREÇÃO AQUI
                 if current_time - entry.first_attempt > timedelta(seconds=config.window_seconds):
-                    # Reseta contador
+                    # Reseta contador completamente
                     entry.attempts = 1
                     entry.first_attempt = current_time
                     entry.last_attempt = current_time
                     entry.blocked_until = None
                     entry.warnings_sent = 0
+                    logging.info(f"Rate limit reset para: {key}")
                     return True, None
+                
+                # Verifica se está bloqueado
+                if entry.blocked_until and current_time < entry.blocked_until:
+                    remaining_time = entry.blocked_until - current_time
+                    return False, f"Bloqueado por {int(remaining_time.total_seconds())} segundos"
                 
                 # Verifica se excedeu o limite
                 if entry.attempts >= config.max_attempts:
@@ -310,27 +313,40 @@ class RateLimiter:
                                     if entry.blocked_until and datetime.utcnow() < entry.blocked_until)
                 
                 # Estatísticas por tipo
-                stats_by_type = {}
+                limits_by_type = {}
                 for limit_type in RateLimitType:
                     type_entries = [entry for key, entry in self.entries.items() 
                                    if limit_type.value in key]
-                    stats_by_type[limit_type.value] = {
+                    limits_by_type[limit_type.value] = {
                         "total_entries": len(type_entries),
                         "blocked_entries": sum(1 for entry in type_entries 
                                              if entry.blocked_until and datetime.utcnow() < entry.blocked_until),
-                        "average_attempts": sum(entry.attempts for entry in type_entries) / len(type_entries) if type_entries else 0
+                        "average_attempts": sum(entry.attempts for entry in type_entries) / len(type_entries) if type_entries else 0,
+                        "config": {
+                            "max_attempts": self.limits[limit_type].max_attempts,
+                            "window_seconds": self.limits[limit_type].window_seconds,
+                            "block_duration_seconds": self.limits[limit_type].block_duration_seconds
+                        }
                     }
                 
                 return {
                     "total_entries": total_entries,
                     "blocked_entries": blocked_entries,
                     "active_entries": total_entries - blocked_entries,
-                    "stats_by_type": stats_by_type
+                    "limits_by_type": limits_by_type,
+                    "cleanup_active": self._cleanup_active,
+                    "last_cleanup": datetime.utcnow().isoformat()
                 }
                 
         except Exception as e:
             logging.error(f"Erro ao obter estatísticas: {str(e)}")
-            return {}
+            return {
+                "total_entries": 0,
+                "blocked_entries": 0,
+                "active_entries": 0,
+                "limits_by_type": {},
+                "error": str(e)
+            }
             
     def stop_cleanup(self):
         """Para o thread de limpeza"""

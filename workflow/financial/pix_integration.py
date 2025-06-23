@@ -101,14 +101,23 @@ class PIXIntegration:
                              description: str) -> Dict[str, Any]:
         """Cria nova transação PIX"""
         try:
-            # Validações de segurança
-            validation_result = self._validate_transaction(parent_id, child_id, amount)
-            if not validation_result["valid"]:
+            # Validações básicas
+            if amount <= 0:
                 return {
                     "success": False,
-                    "error": validation_result["error"],
-                    "transaction_id": None
+                    "error": "Valor deve ser maior que zero"
                 }
+            
+            if amount > 100:  # Limite máximo de R$ 100
+                return {
+                    "success": False,
+                    "error": "Valor máximo permitido é R$ 100,00"
+                }
+            
+            # Valida transação
+            validation = self._validate_transaction(parent_id, child_id, amount)
+            if not validation["success"]:
+                return validation
             
             # Gera ID único da transação
             transaction_id = f"pix_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{hashlib.md5(f'{parent_id}{child_id}{amount}'.encode()).hexdigest()[:8]}"
@@ -134,7 +143,6 @@ class PIXIntegration:
             self.transactions[transaction_id] = transaction
             self._save_transaction(transaction)
             
-            # Log da transação
             self.logger.info(f"Transação PIX criada: {transaction_id} - R$ {amount:.2f}")
             
             return {
@@ -143,16 +151,14 @@ class PIXIntegration:
                 "qr_code": qr_code_data["qr_code"],
                 "qr_code_image": qr_code_data["qr_code_image"],
                 "amount": amount,
-                "description": description,
-                "expires_at": (datetime.now() + timedelta(hours=24)).isoformat()
+                "status": "pending"
             }
             
         except Exception as e:
             self.logger.error(f"Erro ao criar transação PIX: {e}")
             return {
                 "success": False,
-                "error": str(e),
-                "transaction_id": None
+                "error": str(e)
             }
     
     def _validate_transaction(self, parent_id: str, child_id: str, amount: float) -> Dict[str, Any]:
@@ -160,7 +166,7 @@ class PIXIntegration:
         # Valida valor máximo
         if amount > self.max_amount:
             return {
-                "valid": False,
+                "success": False,
                 "error": f"Valor máximo permitido é R$ {self.max_amount:.2f}"
             }
         
@@ -168,7 +174,7 @@ class PIXIntegration:
         daily_total = self._get_daily_total(parent_id)
         if daily_total + amount > self.daily_limit:
             return {
-                "valid": False,
+                "success": False,
                 "error": f"Limite diário excedido. Disponível: R$ {self.daily_limit - daily_total:.2f}"
             }
         
@@ -176,11 +182,11 @@ class PIXIntegration:
         monthly_total = self._get_monthly_total(parent_id)
         if monthly_total + amount > self.monthly_limit:
             return {
-                "valid": False,
+                "success": False,
                 "error": f"Limite mensal excedido. Disponível: R$ {self.monthly_limit - monthly_total:.2f}"
             }
         
-        return {"valid": True, "error": None}
+        return {"success": True, "error": None}
     
     def _generate_pix_qr_code(self, transaction_id: str, amount: float, description: str) -> Dict[str, str]:
         """Gera QR Code PIX"""
@@ -290,7 +296,8 @@ class PIXIntegration:
             return {
                 "success": True,
                 "transaction_id": transaction_id,
-                "status": "cancelled"
+                "status": "cancelled",
+                "message": "Transação cancelada com sucesso"
             }
             
         except Exception as e:

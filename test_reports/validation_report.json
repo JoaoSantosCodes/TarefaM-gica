@@ -1,0 +1,669 @@
+{
+  "validation_summary": {
+    "timestamp": "2025-06-23T00:20:11.938754",
+    "overall_score": 36.885714285714286,
+    "status": "🔴 CRÍTICO",
+    "recommendation": "Correções críticas necessárias",
+    "areas_for_improvement": [
+      "Usabilidade",
+      "Testes Unitários"
+    ]
+  },
+  "detailed_scores": {
+    "security": {
+      "score": 87.5,
+      "status": "✅ PASSOU",
+      "details": {
+        "success": true,
+        "results": {
+          "summary": {
+            "total_tests": 8,
+            "passed": 7,
+            "failed": 1,
+            "security_score": 87.5,
+            "security_level": "🟡 BOM",
+            "duration_seconds": 208.18035197257996
+          },
+          "tests": [
+            {
+              "test": "SQL Injection Protection",
+              "success": true,
+              "details": "Nenhuma vulnerabilidade detectada",
+              "timestamp": "2025-06-23T00:17:44.593316"
+            },
+            {
+              "test": "XSS Protection",
+              "success": true,
+              "details": "Nenhuma vulnerabilidade detectada",
+              "timestamp": "2025-06-23T00:18:33.598353"
+            },
+            {
+              "test": "CSRF Protection",
+              "success": true,
+              "details": "Proteção CSRF adequada",
+              "timestamp": "2025-06-23T00:18:45.812465"
+            },
+            {
+              "test": "Rate Limiting",
+              "success": false,
+              "details": "Rate limiting não detectado",
+              "timestamp": "2025-06-23T00:19:26.638861"
+            },
+            {
+              "test": "Authentication Bypass",
+              "success": true,
+              "details": "Autenticação adequada",
+              "timestamp": "2025-06-23T00:19:38.860365"
+            },
+            {
+              "test": "Data Exposure",
+              "success": true,
+              "details": "Nenhum dado sensível exposto",
+              "timestamp": "2025-06-23T00:19:42.940457"
+            },
+            {
+              "test": "LGPD Compliance",
+              "success": true,
+              "details": "Compliance LGPD adequado",
+              "timestamp": "2025-06-23T00:19:59.231297"
+            },
+            {
+              "test": "Financial Security",
+              "success": true,
+              "details": "Segurança financeira adequada",
+              "timestamp": "2025-06-23T00:20:11.456662"
+            }
+          ],
+          "timestamp": "2025-06-23T00:20:11.457168"
+        },
+        "score": 87.5
+      }
+    },
+    "usability": {
+      "score": 6.285714285714286,
+      "status": "❌ FALHOU",
+      "details": {
+        "success": true,
+        "results": {
+          "summary": {
+            "total_tests": 7,
+            "average_score": 6.285714285714286,
+            "usability_level": "🟡 BOM",
+            "duration_seconds": 0.011635780334472656,
+            "scores": {
+              "interface_children": 8.0,
+              "interface_parents": 8.0,
+              "task_creation": 7.0,
+              "approval_flow": 6.0,
+              "rewards_system": 5.0,
+              "accessibility": 3.0,
+              "performance": 7.0
+            }
+          },
+          "tests": [
+            {
+              "test": "Interface Crianças - Cores vibrantes e atrativas",
+              "success": true,
+              "details": "Interface colorida e divertida",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.467838"
+            },
+            {
+              "test": "Interface Crianças - Ícones grandes e claros",
+              "success": true,
+              "details": "Ícones fáceis de entender",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.467838"
+            },
+            {
+              "test": "Interface Crianças - Texto simples e legível",
+              "success": true,
+              "details": "Linguagem adequada para idade",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.468346"
+            },
+            {
+              "test": "Interface Crianças - Botões grandes e fáceis de tocar",
+              "success": true,
+              "details": "Botões com tamanho adequado",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.468346"
+            },
+            {
+              "test": "Interface Crianças - Navegação intuitiva",
+              "success": true,
+              "details": "Fluxo de navegação simples",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.468346"
+            },
+            {
+              "test": "Interface Crianças - Feedback visual imediato",
+              "success": true,
+              "details": "Resposta visual rápida",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.468346"
+            },
+            {
+              "test": "Interface Crianças - Sem menus complexos",
+              "success": true,
+              "details": "Interface simplificada",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.468346"
+            },
+            {
+              "test": "Interface Crianças - Gamificação visível",
+              "success": true,
+              "details": "Elementos de jogo presentes",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.468346"
+            },
+            {
+              "test": "Interface Crianças - Ajuda contextual",
+              "success": false,
+              "details": "Sistema de ajuda não implementado",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.468346"
+            },
+            {
+              "test": "Interface Crianças - Personalização básica",
+              "success": false,
+              "details": "Personalização limitada",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.469354"
+            },
+            {
+              "test": "Interface para Crianças - Score Final",
+              "success": true,
+              "details": "Score: 8.0/10",
+              "score": 8.0,
+              "timestamp": "2025-06-23T00:20:11.469354"
+            },
+            {
+              "test": "Interface Pais - Dashboard claro e organizado",
+              "success": true,
+              "details": "Visão geral das atividades",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.469869"
+            },
+            {
+              "test": "Interface Pais - Controle parental fácil",
+              "success": true,
+              "details": "Configurações de controle",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.469869"
+            },
+            {
+              "test": "Interface Pais - Relatórios detalhados",
+              "success": true,
+              "details": "Relatórios de progresso",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.469869"
+            },
+            {
+              "test": "Interface Pais - Configurações de segurança",
+              "success": true,
+              "details": "Configurações de privacidade",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.469869"
+            },
+            {
+              "test": "Interface Pais - Histórico de atividades",
+              "success": true,
+              "details": "Log de atividades",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.469869"
+            },
+            {
+              "test": "Interface Pais - Notificações configuráveis",
+              "success": true,
+              "details": "Sistema de notificações",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.470885"
+            },
+            {
+              "test": "Interface Pais - Gestão de recompensas",
+              "success": true,
+              "details": "Controle de recompensas",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.470885"
+            },
+            {
+              "test": "Interface Pais - Configurações de conta",
+              "success": true,
+              "details": "Gestão de perfil",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.470885"
+            },
+            {
+              "test": "Interface Pais - Ajuda e suporte",
+              "success": false,
+              "details": "Sistema de ajuda limitado",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.470885"
+            },
+            {
+              "test": "Interface Pais - Personalização avançada",
+              "success": false,
+              "details": "Personalização básica",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.470885"
+            },
+            {
+              "test": "Interface para Pais - Score Final",
+              "success": true,
+              "details": "Score: 8.0/10",
+              "score": 8.0,
+              "timestamp": "2025-06-23T00:20:11.471401"
+            },
+            {
+              "test": "Fluxo Tarefas - Formulário simples e rápido",
+              "success": true,
+              "details": "Formulário com campos essenciais",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.471401"
+            },
+            {
+              "test": "Fluxo Tarefas - Validação em tempo real",
+              "success": true,
+              "details": "Feedback imediato de erros",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.471401"
+            },
+            {
+              "test": "Fluxo Tarefas - Categorização de tarefas",
+              "success": true,
+              "details": "Sistema de categorias",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.471401"
+            },
+            {
+              "test": "Fluxo Tarefas - Definição de recompensas",
+              "success": true,
+              "details": "Configuração de pontos",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.471401"
+            },
+            {
+              "test": "Fluxo Tarefas - Preview da tarefa",
+              "success": true,
+              "details": "Visualização antes de salvar",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.471401"
+            },
+            {
+              "test": "Fluxo Tarefas - Salvamento automático",
+              "success": true,
+              "details": "Backup automático",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.471401"
+            },
+            {
+              "test": "Fluxo Tarefas - Edição fácil",
+              "success": true,
+              "details": "Modificação simples",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.471401"
+            },
+            {
+              "test": "Fluxo Tarefas - Duplicação de tarefas",
+              "success": false,
+              "details": "Duplicação não implementada",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.472416"
+            },
+            {
+              "test": "Fluxo Tarefas - Templates de tarefas",
+              "success": false,
+              "details": "Templates não disponíveis",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.472416"
+            },
+            {
+              "test": "Fluxo Tarefas - Agendamento avançado",
+              "success": false,
+              "details": "Agendamento básico",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.472416"
+            },
+            {
+              "test": "Fluxo de Criação de Tarefas - Score Final",
+              "success": true,
+              "details": "Score: 7.0/10",
+              "score": 7.0,
+              "timestamp": "2025-06-23T00:20:11.472416"
+            },
+            {
+              "test": "Fluxo Aprovação - Notificação de conclusão",
+              "success": true,
+              "details": "Aviso quando tarefa é concluída",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.472925"
+            },
+            {
+              "test": "Fluxo Aprovação - Visualização da tarefa",
+              "success": true,
+              "details": "Ver detalhes da tarefa",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.472925"
+            },
+            {
+              "test": "Fluxo Aprovação - Aprovação com um clique",
+              "success": true,
+              "details": "Aprovação rápida",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.472925"
+            },
+            {
+              "test": "Fluxo Aprovação - Rejeição com feedback",
+              "success": true,
+              "details": "Rejeição com comentários",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.472925"
+            },
+            {
+              "test": "Fluxo Aprovação - Histórico de aprovações",
+              "success": true,
+              "details": "Log de decisões",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.472925"
+            },
+            {
+              "test": "Fluxo Aprovação - Aprovação em lote",
+              "success": false,
+              "details": "Aprovação múltipla não implementada",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.472925"
+            },
+            {
+              "test": "Fluxo Aprovação - Configuração de auto-aprovação",
+              "success": false,
+              "details": "Auto-aprovação não disponível",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.472925"
+            },
+            {
+              "test": "Fluxo Aprovação - Delegação de aprovação",
+              "success": false,
+              "details": "Delegação não implementada",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.473933"
+            },
+            {
+              "test": "Fluxo Aprovação - Lembretes de aprovação",
+              "success": false,
+              "details": "Sistema de lembretes básico",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.473933"
+            },
+            {
+              "test": "Fluxo Aprovação - Relatórios de aprovação",
+              "success": true,
+              "details": "Relatórios disponíveis",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.473933"
+            },
+            {
+              "test": "Fluxo de Aprovação - Score Final",
+              "success": true,
+              "details": "Score: 6.0/10",
+              "score": 6.0,
+              "timestamp": "2025-06-23T00:20:11.473933"
+            },
+            {
+              "test": "Sistema Recompensas - Visualização de pontos",
+              "success": true,
+              "details": "Saldo de pontos visível",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.474444"
+            },
+            {
+              "test": "Sistema Recompensas - Histórico de recompensas",
+              "success": true,
+              "details": "Log de recompensas",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.474444"
+            },
+            {
+              "test": "Sistema Recompensas - Resgate de recompensas",
+              "success": true,
+              "details": "Sistema de resgate",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.474444"
+            },
+            {
+              "test": "Sistema Recompensas - Aprovação parental",
+              "success": true,
+              "details": "Controle parental",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.474444"
+            },
+            {
+              "test": "Sistema Recompensas - Notificações de recompensas",
+              "success": true,
+              "details": "Avisos de recompensas",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.474444"
+            },
+            {
+              "test": "Sistema Recompensas - Badges visuais",
+              "success": false,
+              "details": "Badges não implementados",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.474444"
+            },
+            {
+              "test": "Sistema Recompensas - Níveis de progresso",
+              "success": false,
+              "details": "Sistema de níveis básico",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.474444"
+            },
+            {
+              "test": "Sistema Recompensas - Recompensas personalizadas",
+              "success": false,
+              "details": "Personalização limitada",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.475451"
+            },
+            {
+              "test": "Sistema Recompensas - Conquistas especiais",
+              "success": false,
+              "details": "Conquistas não implementadas",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.475451"
+            },
+            {
+              "test": "Sistema Recompensas - Compartilhamento social",
+              "success": false,
+              "details": "Compartilhamento não disponível",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.475451"
+            },
+            {
+              "test": "Sistema de Recompensas - Score Final",
+              "success": true,
+              "details": "Score: 5.0/10",
+              "score": 5.0,
+              "timestamp": "2025-06-23T00:20:11.475451"
+            },
+            {
+              "test": "Acessibilidade - Contraste adequado",
+              "success": true,
+              "details": "Contraste de cores adequado",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.475963"
+            },
+            {
+              "test": "Acessibilidade - Tamanho de fonte ajustável",
+              "success": false,
+              "details": "Ajuste de fonte não implementado",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.475963"
+            },
+            {
+              "test": "Acessibilidade - Navegação por teclado",
+              "success": false,
+              "details": "Navegação por teclado limitada",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.475963"
+            },
+            {
+              "test": "Acessibilidade - Suporte a leitores de tela",
+              "success": false,
+              "details": "Suporte básico a leitores",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.475963"
+            },
+            {
+              "test": "Acessibilidade - Alternativas textuais",
+              "success": true,
+              "details": "Textos alternativos presentes",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.476460"
+            },
+            {
+              "test": "Acessibilidade - Foco visível",
+              "success": false,
+              "details": "Indicador de foco limitado",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.476460"
+            },
+            {
+              "test": "Acessibilidade - Estrutura semântica",
+              "success": true,
+              "details": "HTML semântico adequado",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.476460"
+            },
+            {
+              "test": "Acessibilidade - Controles de mídia",
+              "success": false,
+              "details": "Controles de mídia não implementados",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.476460"
+            },
+            {
+              "test": "Acessibilidade - Redução de movimento",
+              "success": false,
+              "details": "Redução de animações não disponível",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.476460"
+            },
+            {
+              "test": "Acessibilidade - Modo de alto contraste",
+              "success": false,
+              "details": "Modo alto contraste não implementado",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.476962"
+            },
+            {
+              "test": "Acessibilidade - Score Final",
+              "success": true,
+              "details": "Score: 3.0/10",
+              "score": 3.0,
+              "timestamp": "2025-06-23T00:20:11.476962"
+            },
+            {
+              "test": "Performance - Carregamento rápido",
+              "success": true,
+              "details": "Tempo de carregamento aceitável",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.477459"
+            },
+            {
+              "test": "Performance - Resposta imediata",
+              "success": true,
+              "details": "Feedback rápido",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.477459"
+            },
+            {
+              "test": "Performance - Otimização para mobile",
+              "success": true,
+              "details": "Responsivo para dispositivos móveis",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.477459"
+            },
+            {
+              "test": "Performance - Cache eficiente",
+              "success": true,
+              "details": "Sistema de cache implementado",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.477459"
+            },
+            {
+              "test": "Performance - Compressão de dados",
+              "success": true,
+              "details": "Dados comprimidos",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.477459"
+            },
+            {
+              "test": "Performance - Lazy loading",
+              "success": false,
+              "details": "Carregamento sob demanda não implementado",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.477459"
+            },
+            {
+              "test": "Performance - Otimização de imagens",
+              "success": false,
+              "details": "Otimização básica de imagens",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.477459"
+            },
+            {
+              "test": "Performance - Minificação de recursos",
+              "success": true,
+              "details": "Recursos minificados",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.477459"
+            },
+            {
+              "test": "Performance - CDN para recursos",
+              "success": false,
+              "details": "CDN não implementado",
+              "score": 0,
+              "timestamp": "2025-06-23T00:20:11.477459"
+            },
+            {
+              "test": "Performance - Monitoramento de performance",
+              "success": true,
+              "details": "Métricas de performance",
+              "score": 1,
+              "timestamp": "2025-06-23T00:20:11.478469"
+            },
+            {
+              "test": "Performance - Score Final",
+              "success": true,
+              "details": "Score: 7.0/10",
+              "score": 7.0,
+              "timestamp": "2025-06-23T00:20:11.478469"
+            }
+          ],
+          "timestamp": "2025-06-23T00:20:11.478469"
+        },
+        "score": 6.285714285714286
+      }
+    },
+    "unit_tests": {
+      "score": 0,
+      "status": "❌ FALHOU",
+      "details": {
+        "success": false,
+        "output": "C:\\Users\\joaoc\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pytest\\config\\__init__.py:328: PluggyTeardownRaisedWarning: A plugin raised an exception during an old-style hookwrapper teardown.\nPlugin: helpconfig, Hook: pytest_cmdline_parse\nUsageError: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report\n  inifile: C:\\Users\\joaoc\\Documents\\Cursos\\TarefaMágica\\pytest.ini\n  rootdir: C:\\Users\\joaoc\\Documents\\Cursos\\TarefaMágica\nFor more information see https://pluggy.readthedocs.io/en/stable/api_reference.html#pluggy.PluggyTeardownRaisedWarning\n  config = pluginmanager.hook.pytest_cmdline_parse(\nERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report\n  inifile: C:\\Users\\joaoc\\Documents\\Cursos\\TarefaMágica\\pytest.ini\n  rootdir: C:\\Users\\joaoc\\Documents\\Cursos\\TarefaMágica\n\n",
+        "score": 0
+      }
+    }
+  },
+  "next_steps": [
+    "Melhorar interface para crianças",
+    "Implementar sistema de ajuda",
+    "Adicionar funcionalidades de acessibilidade",
+    "Otimizar fluxo de criação de tarefas",
+    "Aumentar cobertura de testes",
+    "Corrigir testes falhando",
+    "Implementar testes de integração",
+    "Adicionar testes de performance"
+  ]
+}

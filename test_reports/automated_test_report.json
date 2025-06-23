@@ -1,0 +1,108 @@
+{
+  "timestamp": "2025-06-23T01:33:45.611000",
+  "duration": "0:00:08.440802",
+  "results": {
+    "penetration": {
+      "rate_limiting": {
+        "status": "PASS",
+        "message": "Rate limiting bloqueou 15 tentativas"
+      },
+      "sql_injection": {
+        "status": "PASS",
+        "message": "Input validation prevents SQL injection"
+      },
+      "xss": {
+        "status": "PASS",
+        "message": "Input sanitization prevents XSS"
+      },
+      "csrf": {
+        "status": "PASS",
+        "message": "CSRF tokens implemented"
+      },
+      "authentication": {
+        "status": "PASS",
+        "message": "Authentication system working"
+      }
+    },
+    "usability": {
+      "children_interface": {
+        "status": "PASS",
+        "score": 8.8,
+        "message": "Interface adequada para crianças"
+      },
+      "parents_interface": {
+        "status": "PASS",
+        "score": 8.7,
+        "message": "Interface adequada para pais"
+      },
+      "accessibility": {
+        "status": "PASS",
+        "score": 8.2,
+        "message": "Acessibilidade adequada"
+      },
+      "navigation": {
+        "status": "PASS",
+        "message": "Navegação intuitiva e funcional"
+      }
+    },
+    "performance": {
+      "response_time": {
+        "status": "PASS",
+        "time": 0.07915616035461426,
+        "message": "Tempo de resposta adequado"
+      },
+      "load_test": {
+        "status": "PASS",
+        "ops_per_second": 19.951104784892827,
+        "message": "Performance de carga adequada"
+      },
+      "concurrency": {
+        "status": "PASS",
+        "success_rate": 1.0,
+        "message": "Concorrência funcionando"
+      },
+      "memory_usage": {
+        "status": "PASS",
+        "increase_mb": -0.00390625,
+        "message": "Uso de memória adequado"
+      }
+    },
+    "functionality": {
+      "task_creation": {
+        "status": "PASS",
+        "message": "Sistema de tarefas funcionando"
+      },
+      "reward_system": {
+        "status": "PASS",
+        "message": "Sistema de recompensas funcionando"
+      },
+      "gamification": {
+        "status": "PASS",
+        "message": "Sistema de gamificação funcionando"
+      },
+      "reports": {
+        "status": "PASS",
+        "message": "Sistema de relatórios funcionando"
+      }
+    },
+    "security": {
+      "encryption": {
+        "status": "PASS",
+        "message": "Criptografia implementada corretamente"
+      },
+      "audit_logs": {
+        "status": "FAIL",
+        "message": "Logs de auditoria com problemas"
+      },
+      "monitoring": {
+        "status": "PASS",
+        "message": "Sistema de monitoramento funcionando"
+      }
+    }
+  },
+  "summary": {
+    "total_tests": 20,
+    "passed_tests": 19,
+    "success_rate": 95.0
+  }
+}

@@ -229,6 +229,49 @@ class SecurityMonitoring:
         except Exception as e:
             logging.error(f"Erro ao monitorar atividade de consentimento: {str(e)}")
             
+    def monitor_request(
+        self,
+        ip_address: str,
+        user_agent: str,
+        method: str,
+        path: str,
+        user_id: Optional[str] = None
+    ) -> bool:
+        """
+        Monitora requisição HTTP
+        
+        Args:
+            ip_address: Endereço IP
+            user_agent: User agent
+            method: Método HTTP
+            path: Caminho da requisição
+            user_id: ID do usuário (opcional)
+            
+        Returns:
+            True se monitorado com sucesso
+        """
+        try:
+            # Registra métrica de requisição
+            self._record_metric("http_requests", 1, user_id, {
+                "ip_address": ip_address,
+                "method": method,
+                "path": path,
+                "user_agent": user_agent
+            })
+            
+            # Verifica IP suspeito
+            self._check_suspicious_ip(ip_address)
+            
+            # Verifica padrões de acesso se houver usuário
+            if user_id:
+                self._check_data_access_patterns(user_id, path, method)
+            
+            return True
+            
+        except Exception as e:
+            logging.error(f"Erro ao monitorar requisição: {str(e)}")
+            return False
+            
     def _check_multiple_login_attempts(self, user_id: str, ip_address: str):
         """Verifica múltiplas tentativas de login"""
         try:

@@ -826,4 +826,93 @@ class AuditSystem:
         """Para o processador"""
         self.processor_active = False
         if hasattr(self, 'processor_thread'):
-            self.processor_thread.join(timeout=5) 
+            self.processor_thread.join(timeout=5)
+
+    def log_api_call(
+        self,
+        user_id: str,
+        action: str,
+        resource: str,
+        status_code: int,
+        ip_address: str,
+        user_agent: str,
+        success: bool = True,
+        details: Optional[Dict[str, Any]] = None
+    ) -> bool:
+        """
+        Registra chamada de API para auditoria
+        
+        Args:
+            user_id: ID do usuário
+            action: Ação realizada
+            resource: Recurso acessado
+            status_code: Código de status HTTP
+            ip_address: Endereço IP
+            user_agent: User agent
+            success: Se a operação foi bem-sucedida
+            details: Detalhes adicionais
+            
+        Returns:
+            True se registrado com sucesso
+        """
+        try:
+            # Mapeia ação para AuditAction
+            action_mapping = {
+                "GET": AuditAction.DATA_READ,
+                "POST": AuditAction.DATA_WRITE,
+                "PUT": AuditAction.DATA_WRITE,
+                "DELETE": AuditAction.DATA_DELETE,
+                "PATCH": AuditAction.DATA_WRITE
+            }
+            
+            audit_action = action_mapping.get(action, AuditAction.SYSTEM)
+            
+            # Determina categoria baseada no recurso
+            if "auth" in resource.lower():
+                category = AuditCategory.AUTHENTICATION
+            elif "financial" in resource.lower() or "pix" in resource.lower():
+                category = AuditCategory.FINANCIAL
+            elif "consent" in resource.lower():
+                category = AuditCategory.CONSENT
+            elif "security" in resource.lower():
+                category = AuditCategory.SECURITY
+            else:
+                category = AuditCategory.SYSTEM
+            
+            # Determina nível baseado no status code
+            if status_code >= 500:
+                level = AuditLevel.ERROR
+            elif status_code >= 400:
+                level = AuditLevel.WARNING
+            else:
+                level = AuditLevel.INFO
+            
+            # Cria descrição
+            description = f"API {action} {resource} - Status: {status_code}"
+            
+            # Adiciona detalhes
+            if details is None:
+                details = {}
+            details.update({
+                "status_code": status_code,
+                "ip_address": ip_address,
+                "user_agent": user_agent,
+                "resource": resource
+            })
+            
+            # Registra evento
+            self.log_event(
+                user_id=user_id,
+                category=category,
+                action=audit_action,
+                description=description,
+                level=level,
+                details=details,
+                success=success
+            )
+            
+            return True
+            
+        except Exception as e:
+            logging.error(f"Erro ao registrar chamada de API: {str(e)}")
+            return False 
