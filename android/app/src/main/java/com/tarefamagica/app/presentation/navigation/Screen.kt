@@ -89,4 +89,11 @@ sealed class Screen(val route: String) {
         
         fun createRoute(userId: String) = "$route/$userId"
     }
+    
+    object Settings : Screen("settings") {
+        val arguments = listOf(
+            navArgument("userId") { type = NavType.StringType }
+        )
+        fun createRoute(userId: String) = "$route/$userId"
+    }
 } 

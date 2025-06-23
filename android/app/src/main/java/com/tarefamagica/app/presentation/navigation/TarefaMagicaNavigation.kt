@@ -17,6 +17,7 @@ import com.tarefamagica.app.presentation.screens.levels.LevelsScreen
 import com.tarefamagica.app.presentation.screens.notifications.NotificationsScreen
 import com.tarefamagica.app.presentation.screens.profile.ProfileScreen
 import com.tarefamagica.app.presentation.screens.reports.ReportsScreen
+import com.tarefamagica.app.presentation.screens.settings.SettingsScreen
 import com.tarefamagica.app.presentation.screens.tasks.TaskDetailScreen
 import com.tarefamagica.app.presentation.screens.tasks.TaskListScreen
 import com.tarefamagica.app.presentation.screens.tasks.TasksScreen
@@ -289,6 +290,19 @@ fun TarefaMagicaNavigation(
         ) { backStackEntry ->
             val userId = backStackEntry.arguments?.getString("userId") ?: ""
             ReportsScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        
+        // Settings Screen
+        composable(
+            route = Screen.Settings.route,
+            arguments = Screen.Settings.arguments
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId") ?: ""
+            SettingsScreen(
                 onNavigateBack = {
                     navController.popBackStack()
                 }
