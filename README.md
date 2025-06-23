@@ -1,136 +1,122 @@
-# 🎯 Workflow Automático
+# ✨ TarefaMágica
 
-Sistema modular de análise e automação de workflows para projetos de software.
+Sistema automatizado e seguro para gestão de tarefas, consentimento parental, controle financeiro e integração com aplicativos Android, com foco em compliance LGPD e segurança de dados.
 
-## 📋 Funcionalidades
+---
 
-- **Análise Base**
-  - Escaneamento de checklists
-  - Relatórios de progresso
-  - Análise por prioridade
-  - Atualização de documentação
-  - Lista de pendências
-  - Preparação de commits
+## 📋 Funcionalidades Principais
 
-- **Análise por IA**
-  - Análise de tarefas
-  - Análise de fluxos de trabalho
-  - Identificação de dependências
-  - Sugestões de priorização
+- **Automação de Workflows**
+  - Análise e geração automática de checklists
+  - Relatórios de progresso e priorização
+  - Atualização e validação de documentação
+- **Segurança e Compliance**
+  - Consentimento parental conforme LGPD
+  - Autenticação de dois fatores (2FA)
+  - Controle de acesso baseado em roles (RBAC)
+  - Criptografia de dados sensíveis
+  - Auditoria e logs detalhados
+- **Gestão Financeira Segura**
+  - Proteção de transações PIX
+  - Aprovação e rastreamento de operações financeiras
+- **Integração Android**
+  - SDK nativo para integração com apps Android
+  - Gerenciamento de consentimento, 2FA e permissões
+- **APIs RESTful**
+  - Endpoints para todas as operações de segurança, consentimento e controle de acesso
+
+---
 
 ## 🚀 Como Usar
 
 ### Pré-requisitos
-
 - Python 3.8+
 - Sistema operacional: Windows, Linux ou macOS
 
 ### Instalação
 
 1. Clone o repositório:
-```bash
-git clone https://github.com/JoaoSantosCodes/Workflow-Automatico.git
-cd Workflow-Automatico
-```
-
+   ```bash
+   git clone https://github.com/JoaoSantosCodes/TarefaM-gica.git
+   cd TarefaM-gica
+   ```
 2. (Opcional) Crie um ambiente virtual:
-```bash
-python -m venv venv
-source venv/bin/activate  # Linux/macOS
-venv\\Scripts\\activate     # Windows
-```
-
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Linux/macOS
+   venv\Scripts\activate   # Windows
+   ```
 3. Instale as dependências:
-```bash
-pip install -r requirements.txt
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ### Execução
 
-1. Análise básica:
-```bash
-python workflow/base_analyzer.py analyze
-```
+- **Análise de Checklists:**
+  ```bash
+  python workflow/base_analyzer.py analyze
+  ```
+- **Análise de IA - Tarefas:**
+  ```bash
+  python workflow/ia_analyzer.py tasks
+  ```
+- **Análise de IA - Fluxos:**
+  ```bash
+  python workflow/ia_analyzer.py flow
+  ```
 
-2. Análise de IA - Tarefas:
-```bash
-python workflow/ia_analyzer.py tasks
-```
-
-3. Análise de IA - Fluxos:
-```bash
-python workflow/ia_analyzer.py flow
-```
+---
 
 ## 📁 Estrutura do Projeto
 
 ```
-Workflow-Automatico/
+TarefaM-gica/
 ├── workflow/                     # Core do sistema
-│   ├── __init__.py             
 │   ├── base_analyzer.py         # Análise base
 │   ├── ia_analyzer.py           # Análise por IA
 │   ├── diagram_generator.py     # Gerador de diagramas
+│   ├── api/                     # Rotas RESTful
+│   ├── security/                # Módulos de segurança
 │   └── utils/                   # Utilitários
-│       ├── __init__.py
-│       ├── file_handler.py      # Manipulação de arquivos
-│       └── output_formatter.py  # Formatação de saída
 │
-├── templates/                    # Templates padrão
-│   ├── checklists/             
-│   │   ├── base.md             # Checklist base
-│   │   └── examples/           # Exemplos de checklists
-│   └── outputs/                 # Templates de saída
-│
-├── docs/                        # Documentação
-│   ├── USAGE.md                # Guia de uso
-│   ├── INTEGRATION.md          # Guia de integração
-│   └── examples/               # Exemplos de uso
-│
-├── tests/                       # Testes
-│   ├── __init__.py
-│   ├── test_base_analyzer.py
-│   └── test_ia_analyzer.py
-│
-├── LICENSE                      # Licença MIT
+├── templates/                   # Templates padrão
+├── docs/                        # Documentação e exemplos
+├── checklists/                  # Checklists de validação
+├── workflow_scripts/            # Scripts de automação
+├── resumo/                      # Resumos e análises
+├── requirements.txt             # Dependências
 ├── README.md                    # Este arquivo
-├── CONTRIBUTING.md             # Guia de contribuição
-└── requirements.txt            # Dependências
+├── LICENSE                      # Licença MIT
+└── ...
 ```
 
-## 🔧 Configuração
+---
 
-O sistema é altamente configurável através de arquivos de configuração:
+## 🔒 Segurança e Compliance
 
-1. `config/base_config.json`: Configurações da análise base
-2. `config/ia_config.json`: Configurações da análise por IA
-3. `config/output_config.json`: Configurações de saída
+- **Consentimento Parental:** Módulo completo conforme LGPD
+- **2FA:** Autenticação de dois fatores para responsáveis
+- **Controle de Acesso:** RBAC com auditoria e logs
+- **Criptografia:** AES-256 para dados sensíveis
+- **Proteção Financeira:** Segurança em transações PIX
+- **Auditoria:** Logs detalhados de todas as ações
 
-## 📊 Exemplos de Uso
+---
 
-### Análise Base
-```python
-from workflow.base_analyzer import BaseAnalyzer
+## 🤖 Integração Android
 
-analyzer = BaseAnalyzer()
-analyzer.analyze_project("./meu_projeto")
-analyzer.generate_report()
-```
+- SDK nativo para gerenciamento de consentimento, 2FA e permissões
+- Exemplos em `docs/examples/android/`
 
-### Análise IA
-```python
-from workflow.ia_analyzer import IAAnalyzer
+---
 
-analyzer = IAAnalyzer()
-analyzer.analyze_tasks("./meu_projeto")
-analyzer.analyze_flow()
-analyzer.generate_suggestions()
-```
+## 📝 Contribuindo
 
-## 🤝 Contribuindo
+Veja o arquivo `CONTRIBUTING.md` para detalhes sobre como contribuir com o projeto.
 
-Veja [CONTRIBUTING.md](CONTRIBUTING.md) para detalhes sobre como contribuir com o projeto.
+---
 
-## 📝 Licença
+## 📄 Licença
 
-Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes. 
+Este projeto está licenciado sob a licença MIT. Veja o arquivo `LICENSE` para detalhes. 
