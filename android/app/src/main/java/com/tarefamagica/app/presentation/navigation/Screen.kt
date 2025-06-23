@@ -7,19 +7,40 @@ sealed class Screen(val route: String) {
     // Autenticação
     object Login : Screen("login")
     object Register : Screen("register")
-    object TwoFactor : Screen("two_factor/{userId}") {
+    object TwoFactor : Screen("two_factor") {
         val arguments = listOf(
             navArgument("userId") { type = NavType.StringType }
         )
         
-        fun createRoute(userId: String) = "two_factor/$userId"
+        fun createRoute(userId: String) = "$route/$userId"
+    }
+    
+    object ParentalConsent : Screen("parental_consent") {
+        val arguments = listOf(
+            navArgument("userId") { type = NavType.StringType }
+        )
+        
+        fun createRoute(userId: String) = "$route/$userId"
     }
     
     // Dashboard
-    object Dashboard : Screen("dashboard")
+    object Dashboard : Screen("dashboard") {
+        val arguments = listOf(
+            navArgument("userId") { type = NavType.StringType }
+        )
+        
+        fun createRoute(userId: String) = "$route/$userId"
+    }
     
     // Tarefas
-    object TaskList : Screen("tasks")
+    object TaskList : Screen("tasks") {
+        val arguments = listOf(
+            navArgument("userId") { type = NavType.StringType }
+        )
+        
+        fun createRoute(userId: String) = "$route/$userId"
+    }
+    
     object TaskDetail : Screen("task/{taskId}") {
         val arguments = listOf(
             navArgument("taskId") { type = NavType.StringType }
@@ -37,5 +58,19 @@ sealed class Screen(val route: String) {
     object Wallet : Screen("wallet")
     
     // Perfil
-    object Profile : Screen("profile")
+    object Profile : Screen("profile") {
+        val arguments = listOf(
+            navArgument("userId") { type = NavType.StringType }
+        )
+        
+        fun createRoute(userId: String) = "$route/$userId"
+    }
+    
+    object Pix : Screen("pix") {
+        val arguments = listOf(
+            navArgument("userId") { type = NavType.StringType }
+        )
+        
+        fun createRoute(userId: String) = "$route/$userId"
+    }
 } 
