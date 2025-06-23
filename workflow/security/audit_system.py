@@ -15,6 +15,8 @@ import threading
 import hashlib
 import uuid
 
+from .log_sanitization import log_sanitizer
+
 class AuditLevel(Enum):
     DEBUG = "debug"
     INFO = "info"
@@ -135,6 +137,9 @@ class AuditSystem:
         self._load_configuration()
         self._start_audit_processor()
         
+        # Configura logger com sanitização automática
+        self.audit_logger = log_sanitizer.create_sanitized_logger('audit_system', logging.INFO)
+        
     def _setup_storage(self):
         """Configura diretório de armazenamento"""
         os.makedirs(self.storage_path, exist_ok=True)
@@ -159,7 +164,8 @@ class AuditSystem:
             "compression_enabled": True,
             "real_time_processing": True,
             "batch_size": 100,
-            "archive_after_days": 30
+            "archive_after_days": 30,
+            "sanitization_enabled": True  # Habilita sanitização por padrão
         }
         
         # Carrega configuração de arquivo se existir
@@ -199,14 +205,76 @@ class AuditSystem:
             if not self.event_queue:
                 return
                 
+            # Remove eventos do início da fila
             batch = self.event_queue[:self.config["batch_size"]]
             self.event_queue = self.event_queue[self.config["batch_size"]:]
             
-            # Salva eventos em arquivo
+            # Sanitiza eventos antes de salvar
+            if self.config.get("sanitization_enabled", True):
+                sanitized_batch = []
+                for event in batch:
+                    sanitized_event = self._sanitize_audit_event(event)
+                    sanitized_batch.append(sanitized_event)
+                batch = sanitized_batch
+            
+            # Salva lote sanitizado
             self._save_events_batch(batch)
             
         except Exception as e:
-            logging.error(f"Erro ao processar lote: {str(e)}")
+            logging.error(f"Erro ao processar lote de auditoria: {str(e)}")
+            
+    def _sanitize_audit_event(self, event: AuditEvent) -> AuditEvent:
+        """
+        Sanitiza um evento de auditoria removendo dados sensíveis
+        
+        Args:
+            event: Evento de auditoria
+            
+        Returns:
+            AuditEvent: Evento sanitizado
+        """
+        try:
+            # Sanitiza campos de texto
+            sanitized_description = log_sanitizer.sanitize_string(event.description)
+            sanitized_error_message = None
+            if event.error_message:
+                sanitized_error_message = log_sanitizer.sanitize_string(event.error_message)
+                
+            # Sanitiza detalhes se existirem
+            sanitized_details = None
+            if event.details:
+                sanitized_details = log_sanitizer.sanitize_json(event.details)
+                
+            # Sanitiza user_agent
+            sanitized_user_agent = None
+            if event.user_agent:
+                sanitized_user_agent = log_sanitizer.sanitize_string(event.user_agent)
+                
+            # Cria novo evento sanitizado
+            sanitized_event = AuditEvent(
+                event_id=event.event_id,
+                timestamp=event.timestamp,
+                user_id=event.user_id,  # Não sanitiza user_id pois é necessário para auditoria
+                session_id=event.session_id,
+                ip_address=event.ip_address,  # Não sanitiza IP pois é necessário para auditoria
+                user_agent=sanitized_user_agent,
+                category=event.category,
+                action=event.action,
+                level=event.level,
+                description=sanitized_description,
+                details=sanitized_details,
+                resource_id=event.resource_id,
+                resource_type=event.resource_type,
+                success=event.success,
+                duration_ms=event.duration_ms,
+                error_message=sanitized_error_message
+            )
+            
+            return sanitized_event
+            
+        except Exception as e:
+            logging.error(f"Erro ao sanitizar evento de auditoria: {str(e)}")
+            return event  # Retorna evento original em caso de erro
             
     def log_event(
         self,
@@ -699,24 +767,38 @@ class AuditSystem:
             return 0
             
     def _event_to_dict(self, event: AuditEvent) -> Dict:
-        """Converte evento para dicionário"""
+        """Converte evento para dicionário com sanitização de dados sensíveis"""
+        # Sanitiza dados sensíveis antes da conversão
+        sanitized_description = log_sanitizer.sanitize_string(event.description)
+        sanitized_error_message = None
+        if event.error_message:
+            sanitized_error_message = log_sanitizer.sanitize_string(event.error_message)
+            
+        sanitized_user_agent = None
+        if event.user_agent:
+            sanitized_user_agent = log_sanitizer.sanitize_string(event.user_agent)
+            
+        sanitized_details = None
+        if event.details:
+            sanitized_details = log_sanitizer.sanitize_json(event.details)
+            
         return {
             "event_id": event.event_id,
             "timestamp": event.timestamp.isoformat(),
-            "user_id": event.user_id,
+            "user_id": event.user_id,  # Mantém user_id para auditoria
             "session_id": event.session_id,
-            "ip_address": event.ip_address,
-            "user_agent": event.user_agent,
+            "ip_address": event.ip_address,  # Mantém IP para auditoria
+            "user_agent": sanitized_user_agent,
             "category": event.category.value,
             "action": event.action.value,
             "level": event.level.value,
-            "description": event.description,
-            "details": event.details,
+            "description": sanitized_description,
+            "details": sanitized_details,
             "resource_id": event.resource_id,
             "resource_type": event.resource_type,
             "success": event.success,
             "duration_ms": event.duration_ms,
-            "error_message": event.error_message
+            "error_message": sanitized_error_message
         }
         
     def _dict_to_event(self, data: Dict) -> AuditEvent:
