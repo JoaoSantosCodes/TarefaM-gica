@@ -52,6 +52,8 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Any
 import glob
 import codecs
+import json
+import logging
 
 # Configura encoding para UTF-8
 os.environ["PYTHONIOENCODING"] = "utf-8"
@@ -64,13 +66,13 @@ class ChecklistAnalyzer:
     Classe base para análise e gestão de checklists
     """
     
-    def __init__(self, checklists_dir=None):
+    def __init__(self, checklists_dir: str = "checklists"):
         """
         Inicializa o analisador
         Args:
             checklists_dir (str): Nome da pasta com os checklists
         """
-        self.checklists_dir = checklists_dir or "checklists"
+        self.checklists_dir = checklists_dir
         self.checklists = []
         self.total_items = 0
         self.completed_items = 0
@@ -78,6 +80,17 @@ class ChecklistAnalyzer:
         self.important_checklists = []
         self.nice_to_have_checklists = []
         self.project_root = Path.cwd()
+        self._setup_logging()
+        
+    def _setup_logging(self):
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.StreamHandler(sys.stdout)
+            ]
+        )
+        sys.stdout.reconfigure(encoding='utf-8')
         
     def scan_checklists(self) -> bool:
         """
@@ -466,14 +479,14 @@ class ChecklistAnalyzer:
     
     def update_general_checklist(self) -> None:
         """Atualiza checklist geral com timestamp"""
-        general_file = self.checklists_dir / "CHECKLIST_Geral_Validacao.md"
+        general_file = os.path.join(self.checklists_dir, "CHECKLIST_Geral_Validacao.md")
         
-        if not general_file.exists():
+        if not os.path.exists(general_file):
             print("❌ CHECKLIST_Geral_Validacao.md não encontrado!")
             return
         
         try:
-            content = general_file.read_text(encoding='utf-8')
+            content = open(general_file, 'r', encoding='utf-8').read()
             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             
             if '🔄 Última Atualização:' not in content:
@@ -488,7 +501,7 @@ class ChecklistAnalyzer:
                     content
                 )
             
-            general_file.write_text(content, encoding='utf-8')
+            open(general_file, 'w', encoding='utf-8').write(content)
             print("✅ Checklist geral atualizado!")
             
         except Exception as e:
