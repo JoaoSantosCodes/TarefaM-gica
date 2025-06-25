@@ -1,0 +1,6 @@
+{
+  "enabled": true,
+  "max_batch_size": 10,
+  "confirmation_required": true,
+  "notification_template": "Aprovadas {count} tarefas de uma vez"
+}

@@ -1,0 +1,33 @@
+{
+  "lazy_loading": {
+    "enabled": true,
+    "threshold": 0.1,
+    "root_margin": "50px"
+  },
+  "image_optimization": {
+    "enabled": true,
+    "quality": 85,
+    "formats": [
+      "webp",
+      "jpg"
+    ],
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ]
+  },
+  "caching": {
+    "enabled": true,
+    "duration": 3600,
+    "strategies": [
+      "memory",
+      "local_storage"
+    ]
+  },
+  "cdn": {
+    "enabled": false,
+    "url": "",
+    "fallback": true
+  }
+}

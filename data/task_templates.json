@@ -1,0 +1,41 @@
+{
+  "household": [
+    {
+      "name": "Arrumar a Cama",
+      "description": "Deixar a cama bem arrumada",
+      "points": 2,
+      "category": "Quarto",
+      "difficulty": "Fácil"
+    },
+    {
+      "name": "Lavar a Louça",
+      "description": "Lavar e secar toda a louça",
+      "points": 5,
+      "category": "Cozinha",
+      "difficulty": "Médio"
+    },
+    {
+      "name": "Organizar Brinquedos",
+      "description": "Guardar todos os brinquedos no lugar",
+      "points": 3,
+      "category": "Quarto",
+      "difficulty": "Fácil"
+    }
+  ],
+  "study": [
+    {
+      "name": "Fazer Lição de Casa",
+      "description": "Completar as tarefas da escola",
+      "points": 4,
+      "category": "Estudos",
+      "difficulty": "Médio"
+    },
+    {
+      "name": "Ler um Livro",
+      "description": "Ler por 20 minutos",
+      "points": 3,
+      "category": "Estudos",
+      "difficulty": "Fácil"
+    }
+  ]
+}

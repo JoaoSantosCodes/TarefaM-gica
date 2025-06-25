@@ -1,0 +1,29 @@
+{
+  "default": {
+    "name": "Padrão",
+    "colors": {
+      "primary": "#4CAF50",
+      "secondary": "#2196F3",
+      "accent": "#FF9800"
+    },
+    "font_size": "medium"
+  },
+  "ocean": {
+    "name": "Oceano",
+    "colors": {
+      "primary": "#03A9F4",
+      "secondary": "#00BCD4",
+      "accent": "#009688"
+    },
+    "font_size": "medium"
+  },
+  "forest": {
+    "name": "Floresta",
+    "colors": {
+      "primary": "#4CAF50",
+      "secondary": "#8BC34A",
+      "accent": "#CDDC39"
+    },
+    "font_size": "medium"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "first_task": {
+    "name": "Primeira Tarefa",
+    "description": "Completou sua primeira tarefa",
+    "icon": "🌟",
+    "points_required": 1
+  },
+  "week_streak": {
+    "name": "Semana Perfeita",
+    "description": "Completou tarefas por 7 dias seguidos",
+    "icon": "🔥",
+    "points_required": 50
+  },
+  "helpful": {
+    "name": "Prestativo",
+    "description": "Completou 10 tarefas domésticas",
+    "icon": "🏠",
+    "points_required": 20
+  },
+  "student": {
+    "name": "Estudioso",
+    "description": "Completou 5 tarefas de estudo",
+    "icon": "📚",
+    "points_required": 15
+  }
+}

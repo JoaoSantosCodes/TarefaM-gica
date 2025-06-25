@@ -1,0 +1,14 @@
+{
+  "children_help": {
+    "how_to_complete_task": "Toque na tarefa e depois no botão 'Concluída'",
+    "how_to_see_points": "Seus pontos aparecem no topo da tela",
+    "how_to_redeem_rewards": "Vá em 'Recompensas' e escolha o que quer",
+    "what_to_do_if_stuck": "Peça ajuda aos seus pais ou toque no ícone ?"
+  },
+  "parents_help": {
+    "how_to_create_task": "Toque no + e preencha os detalhes da tarefa",
+    "how_to_approve_task": "Toque na notificação e depois em 'Aprovar'",
+    "how_to_set_rewards": "Configure os pontos ao criar a tarefa",
+    "how_to_view_reports": "Vá em 'Relatórios' para ver o progresso"
+  }
+}

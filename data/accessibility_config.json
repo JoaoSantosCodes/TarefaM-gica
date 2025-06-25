@@ -1,0 +1,25 @@
+{
+  "font_size": {
+    "small": 14,
+    "medium": 16,
+    "large": 18,
+    "extra_large": 20
+  },
+  "high_contrast": {
+    "enabled": false,
+    "colors": {
+      "background": "#000000",
+      "text": "#FFFFFF",
+      "primary": "#FFFF00"
+    }
+  },
+  "screen_reader": {
+    "enabled": true,
+    "announcements": true,
+    "focus_indicators": true
+  },
+  "reduced_motion": {
+    "enabled": false,
+    "disable_animations": false
+  }
+}

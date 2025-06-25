@@ -20,6 +20,20 @@
 **/android/key.properties
 *.jks
 
+# Android build artifacts and large files
+**/android/gradle/
+**/android/jdk*.msi
+**/android/jdk*.exe
+**/android/jdk*.dmg
+**/android/jdk*.tar.gz
+**/android/jdk*.zip
+*.apk
+*.aab
+*.aar
+*.jar
+*.war
+*.ear
+
 # iOS specific
 **/ios/**/*.mode1v3
 **/ios/**/*.mode2v3

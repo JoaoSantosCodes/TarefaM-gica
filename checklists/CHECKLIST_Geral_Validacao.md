@@ -31,6 +31,10 @@ O controle de cobertura, acompanhamento de progresso e recomendações agora é 
 - [ ] Auditoria de segurança completa
 
 ### 🎮 **Funcionalidades Core**
+- [x] Navegação inicial (splash para login) implementada
+- [x] Autenticação local (cadastro/login) implementada
+- [x] Persistência local de tarefas e recompensas implementada
+- [x] Melhorias de UX (feedback visual, layout amigável)
 - [ ] **CHECKLIST_Testes.md** - Cobertura de testes funcionais
 - [ ] **CHECKLIST_Seguranca.md** - Validação de fluxos críticos
 - [ ] **CHECKLIST_Financeiro.md** - Fluxo de recompensas e pagamentos
@@ -169,22 +173,22 @@ O controle de cobertura, acompanhamento de progresso e recomendações agora é 
 ## 🎯 **MATRIZ DE PRIORIZAÇÃO**
 
 ### 🔥 **CRÍTICO (Fazer Primeiro)**
-| Checklist | Status | Progresso | Próxima Ação |
-|-----------|--------|-----------|--------------|
-| CHECKLIST_Seguranca.md | ✅ | 90% | Finalizar plano de resposta a incidentes |
-| CHECKLIST_Testes.md | ✅ | 70% | Implementar testes automatizados |
-| CHECKLIST_Financeiro.md | ✅ | 70% | Finalizar integração PIX |
+| Checklist                | Status | Progresso | Próxima Ação                              |
+|-------------------------|--------|-----------|-------------------------------------------|
+| CHECKLIST_Seguranca.md  | ✅     | 90%       | Finalizar plano de resposta a incidentes   |
+| CHECKLIST_Testes.md     | ✅     | 70%       | Implementar testes automatizados           |
+| CHECKLIST_Financeiro.md | ✅     | 70%       | Finalizar integração PIX                   |
 
 ### ⚡ **IMPORTANTE (Fazer Depois)**
-| Checklist | Status | Progresso | Próxima Ação |
-|-----------|--------|-----------|--------------|
-| CHECKLIST_Deploy.md | ✅ | 50% | Testar rollback e monitoramento |
-| CHECKLIST_DevOps.md | ✅ | 55% | Automatizar backups |
+| Checklist                | Status | Progresso | Próxima Ação                              |
+|-------------------------|--------|-----------|-------------------------------------------|
+| CHECKLIST_Deploy.md     | ✅     | 50%       | Testar rollback e monitoramento            |
+| CHECKLIST_DevOps.md     | ✅     | 55%       | Automatizar backups                        |
 
 ### 📈 **NICE-TO-HAVE (Fazer Por Último)**
-| Checklist | Status | Progresso | Próxima Ação |
-|-----------|--------|-----------|--------------|
-| Funcionalidades extras | 📋 | 30% | Planejar Fase 3 |
+| Checklist                | Status | Progresso | Próxima Ação                              |
+|-------------------------|--------|-----------|-------------------------------------------|
+| Funcionalidades extras   | 📋     | 30%       | Planejar Fase 3                            |
 
 ---
 

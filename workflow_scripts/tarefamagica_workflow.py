@@ -132,11 +132,14 @@ def main():
 def executar_base(comando):
     """Executa comandos do módulo base."""
     if comando == "analyze":
-        print("\nAnálise Base:")
-        print("1. Verificando checklists...")
-        print("2. Calculando prioridades...")
-        print("3. Gerando relatório...")
-        print("4. Atualizando diagramas...")
+        output = ("\nAnálise Base:\n"
+                  "1. Verificando checklists...\n"
+                  "2. Calculando prioridades...\n"
+                  "3. Gerando relatório...\n"
+                  "4. Atualizando diagramas...\n")
+        print(output)
+        with open("outputs/base_output.txt", "w", encoding="utf-8") as f:
+            f.write(output)
     elif comando == "diagrams":
         print("\nGeração de Diagramas:")
         generator = DiagramGenerator()
@@ -148,15 +151,21 @@ def executar_base(comando):
 def executar_ia(comando):
     """Executa comandos do módulo IA."""
     if comando == "ai-tasks":
-        print("\nAnálise de Tarefas IA:")
-        print("1. Processando checklists...")
-        print("2. Identificando padrões...")
-        print("3. Gerando sugestões...")
+        output = ("\nAnálise de Tarefas IA:\n"
+                  "1. Processando checklists...\n"
+                  "2. Identificando padrões...\n"
+                  "3. Gerando sugestões...\n")
+        print(output)
+        with open("outputs/ia_tasks_output.txt", "w", encoding="utf-8") as f:
+            f.write(output)
     elif comando == "ai-flow":
-        print("\nAnálise de Fluxo IA:")
-        print("1. Mapeando workflows...")
-        print("2. Otimizando processos...")
-        print("3. Recomendando melhorias...")
+        output = ("\nAnálise de Fluxo IA:\n"
+                  "1. Mapeando workflows...\n"
+                  "2. Otimizando processos...\n"
+                  "3. Recomendando melhorias...\n")
+        print(output)
+        with open("outputs/ia_flow_output.txt", "w", encoding="utf-8") as f:
+            f.write(output)
     else:
         print(f"Comando {comando} não encontrado")
 
